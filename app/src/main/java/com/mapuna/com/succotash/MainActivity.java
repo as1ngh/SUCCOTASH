@@ -1,5 +1,6 @@
 package com.mapuna.com.succotash;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.support.v7.app.AppCompatActivity;
@@ -27,7 +28,8 @@ public class MainActivity extends AppCompatActivity {
         b.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                TastyToast.makeText(getApplicationContext(), "UNDER BUILD!", TastyToast.LENGTH_LONG, TastyToast.WARNING);
+                startActivity(new Intent(MainActivity.this,secondactivity.class));
+                //TastyToast.makeText(getApplicationContext(), "UNDER BUILD!", TastyToast.LENGTH_LONG, TastyToast.WARNING);
             }
         });
 
