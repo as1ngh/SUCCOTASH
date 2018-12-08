@@ -15,11 +15,12 @@
         android:layout_alignParentStart="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true"
-        android:layout_marginStart="48dp"
-        android:layout_marginLeft="48dp"
+        android:layout_marginStart="79dp"
+        android:layout_marginLeft="79dp"
         android:layout_marginTop="112dp"
         android:visibility="visible"
-        app:srcCompat="@drawable/logo" />
+        app:srcCompat="@drawable/logo"
+        android:transitionName="log"/>
 
     <TextView
         android:id="@+id/head"
@@ -28,10 +29,12 @@
         android:layout_alignParentTop="true"
         android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
-        android:layout_marginTop="156dp"
-        android:layout_marginEnd="46dp"
-        android:layout_marginRight="46dp"
+        android:layout_marginTop="160dp"
+        android:layout_marginEnd="24dp"
+        android:layout_marginRight="24dp"
         android:text="SUCCOTASH"
         android:textColor="#e7eaed"
-        android:textSize="35dp" />
+        android:textSize="35dp"
+        android:transitionName="bth"
+        />
 </RelativeLayout>
