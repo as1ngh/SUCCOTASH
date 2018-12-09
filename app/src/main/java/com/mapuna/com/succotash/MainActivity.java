@@ -36,17 +36,19 @@ public class MainActivity extends AppCompatActivity {
                 p[0]=new Pair<View, String>(rt,"bth");
                 p[1]=new Pair<View, String>(i,"log");
 
-        b.setOnClickListener(new View.OnClickListener() {
 
+
+                //-->FOR ANIMATION AND ACTIVITY CHANGE
+        b.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 ActivityOptions options= ActivityOptions.makeSceneTransitionAnimation(MainActivity.this,p);
                 startActivity(new Intent(MainActivity.this,secondactivity.class),options.toBundle());
                 //TastyToast.makeText(getApplicationContext(), "UNDER BUILD!", TastyToast.LENGTH_LONG, TastyToast.WARNING);
             }
         });
 
+        //-->FOR ROTATING TEXT
         Typeface typeface = Typeface.createFromAsset(getAssets(), "fonts/Reckoner_Bold.ttf");
 
         RotatingTextWrapper rotatingTextWrapper = (RotatingTextWrapper) findViewById(R.id.custom_switcher);
