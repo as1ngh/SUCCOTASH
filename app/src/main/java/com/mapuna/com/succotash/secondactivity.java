@@ -78,12 +78,8 @@ public class secondactivity extends AppCompatActivity {
 
     public void display(){
         final ArrayList<File> songs = songf(Environment.getExternalStorageDirectory());
-        songl=new String[songs.size()];
-        for(int i=0;i<songs.size();i++){
-            songl[i]=songs.get(i).getName().toString().replace("mp3","").replace("wav","");
-        }
-        ArrayAdapter<String>myadapter=new ArrayAdapter<String>(this,android.R.layout.simple_list_item_1,songl);
-        songname.setAdapter(myadapter);
+        mycustomadapter adapter=new mycustomadapter(this,R.layout.customlayout,songs);
+        songname.setAdapter(adapter);
     }
 
 
