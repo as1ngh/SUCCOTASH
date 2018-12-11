@@ -1,57 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/home"
-    tools:context=".MainActivity">
+    tools:context=".MainActivity"
+    android:id="@+id/homelay"
+    >
 
-    <com.sdsmdg.harjot.rotatingtext.RotatingTextWrapper
-        android:id="@+id/custom_switcher"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentTop="true"
-        android:layout_marginStart="108dp"
-        android:layout_marginLeft="108dp"
-        android:layout_marginTop="178dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.475"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.137"
-        android:transitionName="bth"/>
 
     <ImageView
-        android:id="@+id/logo"
-        android:layout_width="168dp"
-        android:layout_height="174dp"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentRight="true"
-        android:layout_marginStart="114dp"
-        android:layout_marginLeft="114dp"
-        android:layout_marginTop="275dp"
-        android:layout_marginEnd="102dp"
-        android:layout_marginRight="102dp"
-        app:srcCompat="@drawable/logo"
-        android:transitionName="log"/>
-
-    <Button
-        android:id="@+id/getst"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="120dp"
-        android:background="@drawable/ic_launcher_foreground"
-        android:shadowColor="@color/colorPrimary"
-       />
-
+        android:id="@+id/headicon"
+        android:layout_width="200dp"
+        android:layout_height="200dp"
+        app:srcCompat="@drawable/headphones"
+        android:layout_centerInParent="true"
+        />
 
 </RelativeLayout>
