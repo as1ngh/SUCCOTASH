@@ -1,6 +1,9 @@
 package com.mapuna.com.succotash;
 
 import android.app.ListActivity;
+import android.content.Intent;
+import android.media.MediaPlayer;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.support.annotation.NonNull;
@@ -10,6 +13,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
@@ -17,26 +21,45 @@ import java.io.File;
 import java.util.ArrayList;
 
 import static android.R.layout.simple_list_item_1;
+import static android.content.Intent.FLAG_ACTIVITY_NO_USER_ACTION;
+import static android.content.Intent.FLAG_ACTIVITY_REORDER_TO_FRONT;
+import static android.content.Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED;
+import static android.content.Intent.FLAG_ACTIVITY_RETAIN_IN_RECENTS;
+import static android.content.Intent.FLAG_ACTIVITY_SINGLE_TOP;
 
 public class fragmentmusiclist extends Fragment  {
     View view;
+    ListView musicnames;
 
     public fragmentmusiclist() {
     }
+
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         view=inflater.inflate(R.layout.musiclist_fragment,container,false);
-        ListView musicnames;
+
         musicnames=(ListView) view.findViewById(R.id.musicl);
 
         final ArrayList<File> mysongs=findsong(Environment.getExternalStorageDirectory());
         customlistadapter adapter=new customlistadapter(getActivity(),R.layout.mycustomlist,mysongs);
 
         musicnames.setAdapter(adapter);
+
+        musicnames.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                File file=mysongs.get(position);
+                startActivity(new Intent(getActivity(),musiclist_activity.class).putExtra("filename",file).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
+            }
+        });
+
         return view;
+
     }
+
+
 
 
     public ArrayList<File>findsong(File file){
@@ -54,7 +77,6 @@ public class fragmentmusiclist extends Fragment  {
         return arrayList;
     }
 
-    //String[]items;
 
 
 

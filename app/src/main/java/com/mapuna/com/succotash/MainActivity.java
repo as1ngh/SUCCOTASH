@@ -14,9 +14,12 @@ import com.karumi.dexter.listener.PermissionGrantedResponse;
 import com.karumi.dexter.listener.PermissionRequest;
 import com.karumi.dexter.listener.single.PermissionListener;
 
+import java.io.File;
+
 public class MainActivity extends AppCompatActivity {
 
     RelativeLayout rt;
+    File file=null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,7 +38,7 @@ public class MainActivity extends AppCompatActivity {
                 rt.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        startActivity(new Intent(MainActivity.this,musiclist_activity.class));
+                        startActivity(new Intent(MainActivity.this,musiclist_activity.class).putExtra("filename",file));
                     }
                 });
             }

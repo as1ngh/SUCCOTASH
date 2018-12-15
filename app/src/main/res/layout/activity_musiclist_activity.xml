@@ -10,10 +10,55 @@
 
     <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"
-        android:layout_height="300dp"
+        android:layout_height="100dp"
         android:layout_gravity="center"
+        android:gravity="fill_horizontal"
         android:elevation="0dp"
         android:id="@+id/appbarid">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+
+            <Button
+                android:id="@+id/play_pause_id"
+                android:layout_width="70dp"
+                android:layout_height="70dp"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_marginEnd="73dp"
+                android:layout_marginRight="73dp"
+                android:background="@drawable/play" />
+
+            <Button
+                android:id="@+id/stop_id"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_marginEnd="18dp"
+                android:layout_marginRight="18dp"
+                android:background="@drawable/stop"
+                />
+
+            <TextView
+                android:id="@+id/musicname_id"
+                android:layout_width="225dp"
+                android:layout_height="34dp"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentBottom="true"
+                android:layout_marginStart="20dp"
+                android:layout_marginLeft="20dp"
+                android:layout_marginBottom="24dp"
+                android:text="MUSIC_NAME"
+                android:textAlignment="center"
+                android:textColor="#ffff"
+                android:textSize="18dp" />
+        </RelativeLayout>
 
     </android.support.design.widget.AppBarLayout>
 
