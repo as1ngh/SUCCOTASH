@@ -51,7 +51,7 @@ public class fragmentmusiclist extends Fragment  {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 File file=mysongs.get(position);
-                startActivity(new Intent(getActivity(),musiclist_activity.class).putExtra("filename",file).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
+                startActivity(new Intent(getActivity(),musiclist_activity.class).putExtra("filename",file).addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION));
             }
         });
 

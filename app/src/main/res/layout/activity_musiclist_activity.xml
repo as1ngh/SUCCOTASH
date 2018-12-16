@@ -18,7 +18,8 @@
 
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:id="@+id/upplayer">
 
 
             <Button
@@ -54,7 +55,7 @@
                 android:layout_marginStart="20dp"
                 android:layout_marginLeft="20dp"
                 android:layout_marginBottom="24dp"
-                android:text="MUSIC_NAME"
+                android:text="Music Name"
                 android:textAlignment="center"
                 android:textColor="#ffff"
                 android:textSize="18dp" />

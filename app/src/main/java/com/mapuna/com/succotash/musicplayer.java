@@ -9,15 +9,11 @@ import java.io.File;
 
 public class musicplayer extends AppCompatActivity {
 
-    MediaPlayer mp;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_musicplayer);
 
-        File file = (File) getIntent().getExtras().get("filename");
-        mp=MediaPlayer.create(this,Uri.parse(file.getAbsolutePath()));
-        mp.start();
     }
 }
