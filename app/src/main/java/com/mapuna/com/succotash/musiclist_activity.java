@@ -63,23 +63,27 @@ public class musiclist_activity extends AppCompatActivity{
         viewPager.setAdapter(adapter);
         tabLayout.setupWithViewPager(viewPager);
 
-        if(ie.mp!=null && ie.mp.isPlaying()){
-            ie.mp.stop();
-            ie.mp=null;
-        }
-
-        if(getIntent().getExtras().get("filename")!=null) {
-            File file = (File) getIntent().getExtras().get("filename");
-            ie.mp = MediaPlayer.create(this, Uri.parse(file.getAbsolutePath()));
-            musicname.setText(file.getName().replace(".mp3", ""));
-            ie.mp.start();
-            final Drawable myDrawable;
-            Resources res = getResources();
-            try {
-                myDrawable = Drawable.createFromXml(res, res.getXml(R.xml.pause));
-                play_pause.setBackground(myDrawable);
-            } catch (Exception ex) {
-                Log.e("Error", "Exception loading drawable");
+        if(ie.mp!=null) {
+            musicname.setText(ie.mysongs.get(ie.currentpos).getName().replace(".mp3", ""));
+            if(ie.mp.isPlaying()) {
+                final Drawable myDrawable;
+                Resources res = getResources();
+                try {
+                    myDrawable = Drawable.createFromXml(res, res.getXml(R.xml.pause));
+                    play_pause.setBackground(myDrawable);
+                } catch (Exception ex) {
+                    Log.e("Error", "Exception loading drawable");
+                }
+            }
+            else{
+                final Drawable myDrawable;
+                Resources res = getResources();
+                try {
+                    myDrawable = Drawable.createFromXml(res, res.getXml(R.xml.play));
+                    play_pause.setBackground(myDrawable);
+                } catch (Exception ex) {
+                    Log.e("Error", "Exception loading drawable");
+                }
             }
 
         }
@@ -87,6 +91,7 @@ public class musiclist_activity extends AppCompatActivity{
         play_pause.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 if(ie.mp==null){
                     Toast.makeText(getApplicationContext(), "No Music Selected", Toast.LENGTH_LONG).show();
                 }
@@ -145,7 +150,11 @@ public class musiclist_activity extends AppCompatActivity{
         music.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(musiclist_activity.this,musicplayer.class));
+
+                if(ie.mp==null)
+                    Toast.makeText(getApplicationContext(), "No Music Selected", Toast.LENGTH_LONG).show();
+                else
+                     startActivity(new Intent(musiclist_activity.this,musicplayer.class));
             }
         });
 
