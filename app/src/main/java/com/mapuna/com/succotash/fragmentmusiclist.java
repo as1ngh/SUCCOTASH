@@ -10,11 +10,15 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 
 import java.io.File;
@@ -29,7 +33,7 @@ import static android.content.Intent.FLAG_ACTIVITY_SINGLE_TOP;
 
 public class fragmentmusiclist extends Fragment  {
     View view;
-    ListView musicnames;
+    static RecyclerView musicnames;
     importantelements ie=new importantelements();
 
     public fragmentmusiclist() {
@@ -41,14 +45,16 @@ public class fragmentmusiclist extends Fragment  {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         view=inflater.inflate(R.layout.musiclist_fragment,container,false);
 
-        musicnames=(ListView) view.findViewById(R.id.musicl);
+        musicnames= (RecyclerView) view.findViewById(R.id.musicl);
 
         ie.mysongs=findsong(Environment.getExternalStorageDirectory());
-        customlistadapter adapter=new customlistadapter(getActivity(),R.layout.mycustomlist,ie.mysongs);
-
+        RecyclerViewAdapter adapter=new RecyclerViewAdapter(getActivity(),ie.mysongs);
         musicnames.setAdapter(adapter);
+        musicnames.setLayoutManager(new LinearLayoutManager(getActivity()));
 
-        musicnames.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+
+
+       /* musicnames.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 if(ie.mp!=null){
@@ -61,7 +67,8 @@ public class fragmentmusiclist extends Fragment  {
                 ie.mp.start();
                 startActivity(new Intent(getActivity(),musiclist_activity.class).putExtra("filename",file).addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION));
             }
-        });
+        });*/
+        Log.d("adapter", "onCreateView:setteled ");
 
         return view;
 
@@ -84,8 +91,6 @@ public class fragmentmusiclist extends Fragment  {
         }
         return arrayList;
     }
-
-
 
 
 

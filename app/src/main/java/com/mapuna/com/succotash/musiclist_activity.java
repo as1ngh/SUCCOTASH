@@ -24,7 +24,7 @@ import android.widget.Toast;
 import java.io.File;
 import java.util.ArrayList;
 
-public class musiclist_activity extends AppCompatActivity{
+public class musiclist_activity extends AppCompatActivity {
 
     importantelements ie=new importantelements();
 
@@ -34,6 +34,7 @@ public class musiclist_activity extends AppCompatActivity{
     TextView musicname;
     Button play_pause;
     Button stop;
+
 
     RelativeLayout music;
 
@@ -62,6 +63,7 @@ public class musiclist_activity extends AppCompatActivity{
 
         viewPager.setAdapter(adapter);
         tabLayout.setupWithViewPager(viewPager);
+        Log.d("fragment", "onCreate:implement ");
 
         if(ie.mp!=null) {
             musicname.setText(ie.mysongs.get(ie.currentpos).getName().replace(".mp3", ""));
@@ -131,8 +133,8 @@ public class musiclist_activity extends AppCompatActivity{
                 }
                 else{
                     ie.mp.stop();
+                    ie.mp.release();
                     ie.mp = null;
-                    musicname.setText("MUSIC_NAME");
                     final Drawable myDrawable;
                     Resources res = getResources();
                     try {
@@ -141,6 +143,7 @@ public class musiclist_activity extends AppCompatActivity{
                     } catch (Exception ex) {
                         Log.e("Error", "Exception loading drawable");
                     }
+                    startActivity(new Intent(musiclist_activity.this,musiclist_activity.class).addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION));
                 }
 
             }
@@ -154,7 +157,7 @@ public class musiclist_activity extends AppCompatActivity{
                 if(ie.mp==null)
                     Toast.makeText(getApplicationContext(), "No Music Selected", Toast.LENGTH_LONG).show();
                 else
-                     startActivity(new Intent(musiclist_activity.this,musicplayer.class));
+                     startActivity(new Intent(getApplicationContext(),musicplayer.class));
             }
         });
 
@@ -164,4 +167,6 @@ public class musiclist_activity extends AppCompatActivity{
     public void onBackPressed() {
         startActivity(new Intent(this,MainActivity.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
     }
+
+
 }

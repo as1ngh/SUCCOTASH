@@ -31,7 +31,7 @@
                 android:layout_centerVertical="true"
                 android:layout_marginEnd="73dp"
                 android:layout_marginRight="73dp"
-                android:background="@drawable/play" />
+                android:background="@xml/play" />
 
             <Button
                 android:id="@+id/stop_id"
