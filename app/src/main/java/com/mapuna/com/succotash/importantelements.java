@@ -12,7 +12,8 @@ public class importantelements {
 
     static MediaPlayer mp;
     static ArrayList<File>mysongs;
-    static int currentpos;
+    static int currentpos = -1;
+    static int recyclerint;
     static NotificationCompat.Builder notification;
     static NotificationManager notificationManager;
 

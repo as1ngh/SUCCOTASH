@@ -1,6 +1,7 @@
 package com.mapuna.com.succotash;
 
 import android.app.ListActivity;
+import android.content.Context;
 import android.content.Intent;
 import android.media.MediaPlayer;
 import android.net.Uri;
@@ -20,6 +21,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -33,10 +35,13 @@ import static android.content.Intent.FLAG_ACTIVITY_SINGLE_TOP;
 
 public class fragmentmusiclist extends Fragment  {
     View view;
-    static RecyclerView musicnames;
+    RecyclerView musicnames;
     importantelements ie=new importantelements();
+    gotinput got;
+    RecyclerViewAdapter adapter;
 
     public fragmentmusiclist() {
+
     }
 
 
@@ -48,7 +53,13 @@ public class fragmentmusiclist extends Fragment  {
         musicnames= (RecyclerView) view.findViewById(R.id.musicl);
 
         ie.mysongs=findsong(Environment.getExternalStorageDirectory());
-        RecyclerViewAdapter adapter=new RecyclerViewAdapter(getActivity(),ie.mysongs);
+        adapter=new RecyclerViewAdapter(getActivity(), ie.mysongs, new RecyclerViewAdapter.CustomItemClickListener() {
+            @Override
+            public void onItemClick(int position) {
+                got.getupdate(position);
+
+            }
+        });
         musicnames.setAdapter(adapter);
         musicnames.setLayoutManager(new LinearLayoutManager(getActivity()));
 
@@ -90,6 +101,28 @@ public class fragmentmusiclist extends Fragment  {
             }
         }
         return arrayList;
+    }
+
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        if (context instanceof gotinput) {
+            got = (gotinput) context;
+        } else {
+            throw new RuntimeException(context.toString()
+                    + " must implement FragmentAListener");
+        }
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        got = null;
+    }
+
+    public interface gotinput{
+        public void getupdate(int i);
     }
 
 

@@ -28,11 +28,13 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     ArrayList<File>musicfiles;
     importantelements ie=new importantelements();
     MediaMetadataRetriever metadataRetriever;
+    CustomItemClickListener listener;
 
 
-    public RecyclerViewAdapter(Context mctx,ArrayList<File>musicfiles) {
+    public RecyclerViewAdapter(Context mctx,ArrayList<File>musicfiles,CustomItemClickListener listener) {
         this.mctx=mctx;
         this.musicfiles=musicfiles;
+        this.listener=listener;
     }
 
     @NonNull
@@ -45,7 +47,6 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
     @Override
     public void onBindViewHolder(@NonNull final ViewHolder viewHolder, final int i) {
-
         metadataRetriever =new MediaMetadataRetriever();
         metadataRetriever.setDataSource(musicfiles.get(i).getAbsolutePath());
 
@@ -61,34 +62,34 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
                     .decodeByteArray(metadataRetriever.getEmbeddedPicture(), 0, metadataRetriever.getEmbeddedPicture().length);
             viewHolder.art.setImageBitmap(songImage);
         }
+        else{
+            viewHolder.art.setImageDrawable(mctx.getResources().getDrawable(R.drawable.headphones));
+        }
 
 
         Typeface musicfont=Typeface.createFromAsset(mctx.getAssets(),"fonts/Quicksand-Regular.ttf");
         viewHolder.musicname.setText(musicfiles.get(i).getName().replace(".mp3",""));
         viewHolder.musicname.setTypeface(musicfont);
         Log.d("onBindcalled", "onBindViewHolder: ok ");
+
+        if(ie.currentpos==i){
+            viewHolder.rt.setBackgroundColor(mctx.getResources().getColor(R.color.colorPrimary));
+            viewHolder.musicname.setTextColor(mctx.getResources().getColor(R.color.white));
+        }
+        else{
+            viewHolder.rt.setBackgroundColor(mctx.getResources().getColor(R.color.white));
+            viewHolder.musicname.setTextColor(mctx.getResources().getColor(R.color.black));
+        }
         viewHolder.rt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(ie.mp!=null){
-                    ie.mp.stop();
-                    ie.mp.release();
-                    ie.mp=null;
-                }
-                ie.mp=MediaPlayer.create(mctx.getApplicationContext(),Uri.parse(musicfiles.get(i).getAbsolutePath()));
+
+                listener.onItemClick(i);
                 ie.currentpos=i;
-                ie.mp.start();
-
-                mctx.startActivity(new Intent(mctx,musiclist_activity.class).addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION));
-
+                notifyDataSetChanged();
             }
         });
-        if(ie.mp!=null){
-            if(i==ie.currentpos){
-                viewHolder.rt.setBackgroundColor(mctx.getResources().getColor(R.color.colorPrimary));
-                viewHolder.musicname.setTextColor(mctx.getResources().getColor(R.color.white));
-            }
-        }
+
 
     }
 
@@ -110,6 +111,11 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
             artistname=(TextView)itemView.findViewById(R.id.artistname);
             art=(ImageView)itemView.findViewById(R.id.art);
         }
+    }
+
+
+    public interface CustomItemClickListener {
+        public void onItemClick(int position);
     }
 
 

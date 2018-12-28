@@ -69,7 +69,7 @@ public class musicplayer extends AppCompatActivity implements musicController.Me
                     ie.mp.release();
                     ie.mp=MediaPlayer.create(getApplicationContext(),Uri.parse(ie.mysongs.get(ie.currentpos).getAbsolutePath()));
                     ie.mp.start();
-                    startActivity(new Intent(musicplayer.this,musicplayer.class).addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION));
+                    update();
                 }
                 else{
                     ie.currentpos=0;
@@ -77,8 +77,7 @@ public class musicplayer extends AppCompatActivity implements musicController.Me
                     ie.mp.release();
                     ie.mp=MediaPlayer.create(getApplicationContext(),Uri.parse(ie.mysongs.get(ie.currentpos).getAbsolutePath()));
                     ie.mp.start();
-                    startActivity(new Intent(musicplayer.this,musicplayer.class).addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION));
-
+                    update();
                 }
 
             }
@@ -92,7 +91,7 @@ public class musicplayer extends AppCompatActivity implements musicController.Me
                     ie.mp.release();
                     ie.mp=MediaPlayer.create(getApplicationContext(),Uri.parse(ie.mysongs.get(ie.currentpos).getAbsolutePath()));
                     ie.mp.start();
-                    startActivity(new Intent(musicplayer.this,musicplayer.class).addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION));
+                update();
                 }
                 else{
                     ie.currentpos=ie.mysongs.size()-1;
@@ -100,7 +99,7 @@ public class musicplayer extends AppCompatActivity implements musicController.Me
                     ie.mp.release();
                     ie.mp=MediaPlayer.create(getApplicationContext(),Uri.parse(ie.mysongs.get(ie.currentpos).getAbsolutePath()));
                     ie.mp.start();
-                    startActivity(new Intent(musicplayer.this,musicplayer.class).addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION));
+                update();
                 }
             }
         });
@@ -142,9 +141,54 @@ public class musicplayer extends AppCompatActivity implements musicController.Me
                     ie.mp=MediaPlayer.create(getApplicationContext(),Uri.parse(ie.mysongs.get(ie.currentpos).getAbsolutePath()));
                     ie.mp.start();
                 }
-                startActivity(new Intent(musicplayer.this,musicplayer.class).addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION));
+                update();
             }
         });
+    }
+
+
+    public void update(){
+        metadataRetriever.setDataSource(ie.mysongs.get(ie.currentpos).getAbsolutePath());
+        if(metadataRetriever.getEmbeddedPicture()!=null){
+            Bitmap songImage = BitmapFactory
+                    .decodeByteArray(metadataRetriever.getEmbeddedPicture(), 0, metadataRetriever.getEmbeddedPicture().length);
+            art.setImageBitmap(songImage);
+        }
+        else{
+            art.setImageDrawable(getDrawable(R.drawable.headphones));
+        }
+
+        musicname.setText(ie.mysongs.get(ie.currentpos).getName());
+
+        if( metadataRetriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_ARTIST)==null){
+            artist.setText("<unknown>");
+        }
+        else {
+            artist.setText(metadataRetriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_ARTIST));
+        }
+
+        ie.mp.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+            @Override
+            public void onCompletion(MediaPlayer mp) {
+                if(ie.currentpos!=ie.mysongs.size()-1){
+                    ie.currentpos=ie.currentpos+1;
+                    ie.mp.stop();
+                    ie.mp.release();
+                    ie.mp=MediaPlayer.create(getApplicationContext(),Uri.parse(ie.mysongs.get(ie.currentpos).getAbsolutePath()));
+                    ie.mp.start();
+                }
+                else{
+                    ie.currentpos=0;
+                    ie.mp.stop();
+                    ie.mp.release();
+                    ie.mp=MediaPlayer.create(getApplicationContext(),Uri.parse(ie.mysongs.get(ie.currentpos).getAbsolutePath()));
+                    ie.mp.start();
+                }
+                update();
+            }
+        });
+
+
     }
 
 
@@ -222,12 +266,6 @@ public class musicplayer extends AppCompatActivity implements musicController.Me
         return false;
     }
 
-
-    //TO START MUSIC LIST ACTIVITY
-    @Override
-    public void onBackPressed() {
-        startActivity(new Intent(this,musiclist_activity.class));
-    }
 
 
 }
