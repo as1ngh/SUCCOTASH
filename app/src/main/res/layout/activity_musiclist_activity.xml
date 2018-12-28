@@ -47,14 +47,14 @@
 
             <TextView
                 android:id="@+id/musicname_id"
-                android:layout_width="225dp"
-                android:layout_height="34dp"
+                android:layout_width="223dp"
+                android:layout_height="46dp"
                 android:layout_alignParentStart="true"
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentBottom="true"
                 android:layout_marginStart="20dp"
                 android:layout_marginLeft="20dp"
-                android:layout_marginBottom="24dp"
+                android:layout_marginBottom="12dp"
                 android:text="Music Name"
                 android:textAlignment="center"
                 android:textColor="#ffff"

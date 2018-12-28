@@ -9,7 +9,7 @@
 
 
     <ImageView
-        android:id="@+id/imageView"
+        android:id="@+id/art"
         android:layout_width="60dp"
         android:layout_height="60dp"
         android:layout_margin="10dp"
@@ -26,13 +26,25 @@
     <TextView
         android:id="@+id/songname_id"
         android:layout_width="match_parent"
-        android:layout_height="25dp"
+        android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
         android:layout_marginRight="10dp"
         android:text="TextView"
+        android:textSize="20dp"
+        android:layout_toRightOf="@+id/art"
+        android:textStyle="bold"
+        android:maxLines="1"/>
+
+    <TextView
+        android:id="@+id/artistname"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/songname_id"
+        android:layout_alignStart="@+id/songname_id"
+        android:layout_marginRight="10dp"
         android:textSize="15dp"
-        android:layout_toRightOf="@+id/imageView"
-        android:textStyle="bold" />
+        android:text="TextView"
+        />
 
 
 </RelativeLayout>

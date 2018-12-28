@@ -17,22 +17,44 @@
         android:id="@+id/image_layout">
 
         <ImageView
-            android:id="@+id/imageView3"
+            android:id="@+id/musicart"
             android:layout_width="200dp"
             android:layout_height="200dp"
-            app:srcCompat="@drawable/headphones" />
+            app:srcCompat="@drawable/headphones"
+            />
 
     </RelativeLayout>
 
     <FrameLayout
+        android:id="@+id/audioView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@+id/image_layout"
-        android:id="@+id/audioView"
-        android:layout_marginBottom="30dp"
-       >
+        android:layout_below="@+id/artistname">
 
     </FrameLayout>
+
+    <TextView
+        android:id="@+id/songname"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/image_layout"
+        android:text="TextView"
+        android:textSize="25dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="30dp"
+        android:maxLines="1"
+        android:layout_marginLeft="45dp"/>
+
+    <TextView
+        android:id="@+id/artistname"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/songname"
+        android:layout_alignStart="@+id/songname"
+        android:textSize="17dp"
+        android:layout_marginRight="10dp"
+        android:maxLines="1"
+        android:text="TextView" />
 
 
 </RelativeLayout>

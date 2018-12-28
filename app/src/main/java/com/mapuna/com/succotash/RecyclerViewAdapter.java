@@ -2,7 +2,10 @@ package com.mapuna.com.succotash;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Typeface;
+import android.media.MediaMetadataRetriever;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.support.annotation.NonNull;
@@ -11,6 +14,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -23,6 +27,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     Context mctx;
     ArrayList<File>musicfiles;
     importantelements ie=new importantelements();
+    MediaMetadataRetriever metadataRetriever;
 
 
     public RecyclerViewAdapter(Context mctx,ArrayList<File>musicfiles) {
@@ -40,8 +45,26 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
     @Override
     public void onBindViewHolder(@NonNull final ViewHolder viewHolder, final int i) {
+
+        metadataRetriever =new MediaMetadataRetriever();
+        metadataRetriever.setDataSource(musicfiles.get(i).getAbsolutePath());
+
+        if( metadataRetriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_ARTIST)==null){
+            viewHolder.artistname.setText("<unknown>");
+        }
+        else {
+            viewHolder.artistname.setText(metadataRetriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_ARTIST));
+        }
+
+        if(metadataRetriever.getEmbeddedPicture()!=null){
+            Bitmap songImage = BitmapFactory
+                    .decodeByteArray(metadataRetriever.getEmbeddedPicture(), 0, metadataRetriever.getEmbeddedPicture().length);
+            viewHolder.art.setImageBitmap(songImage);
+        }
+
+
         Typeface musicfont=Typeface.createFromAsset(mctx.getAssets(),"fonts/Quicksand-Regular.ttf");
-        viewHolder.musicname.setText(musicfiles.get(i).getName());
+        viewHolder.musicname.setText(musicfiles.get(i).getName().replace(".mp3",""));
         viewHolder.musicname.setTypeface(musicfont);
         Log.d("onBindcalled", "onBindViewHolder: ok ");
         viewHolder.rt.setOnClickListener(new View.OnClickListener() {
@@ -76,12 +99,16 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
     public class ViewHolder extends RecyclerView.ViewHolder{
         TextView musicname;
+        TextView artistname;
         RelativeLayout rt;
+        ImageView art;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             musicname=(TextView)itemView.findViewById(R.id.songname_id);
             rt=(RelativeLayout)itemView.findViewById(R.id.list_btn);
+            artistname=(TextView)itemView.findViewById(R.id.artistname);
+            art=(ImageView)itemView.findViewById(R.id.art);
         }
     }
 

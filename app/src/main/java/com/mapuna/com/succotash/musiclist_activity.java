@@ -44,6 +44,9 @@ public class musiclist_activity extends AppCompatActivity {
         setContentView(R.layout.activity_musiclist_activity);
 
 
+        stopService(new Intent(this,MyService.class));
+
+
         tabLayout=(TabLayout)findViewById(R.id.tablayout_id);
         appBarLayout=(AppBarLayout)findViewById(R.id.appbarid);
         viewPager=(ViewPager)findViewById(R.id.viewpager_id);
@@ -87,6 +90,27 @@ public class musiclist_activity extends AppCompatActivity {
                     Log.e("Error", "Exception loading drawable");
                 }
             }
+
+            ie.mp.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+                @Override
+                public void onCompletion(MediaPlayer mp) {
+                    if(ie.currentpos!=ie.mysongs.size()-1){
+                        ie.currentpos=ie.currentpos+1;
+                        ie.mp.stop();
+                        ie.mp.release();
+                        ie.mp=MediaPlayer.create(getApplicationContext(),Uri.parse(ie.mysongs.get(ie.currentpos).getAbsolutePath()));
+                        ie.mp.start();
+                    }
+                    else{
+                        ie.currentpos=0;
+                        ie.mp.stop();
+                        ie.mp.release();
+                        ie.mp=MediaPlayer.create(getApplicationContext(),Uri.parse(ie.mysongs.get(ie.currentpos).getAbsolutePath()));
+                        ie.mp.start();
+                    }
+                    startActivity(new Intent(musiclist_activity.this,musiclist_activity.class).addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION));
+                }
+            });
 
         }
 
@@ -163,9 +187,10 @@ public class musiclist_activity extends AppCompatActivity {
 
     }
 
+
     @Override
     public void onBackPressed() {
-        startActivity(new Intent(this,MainActivity.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
+        startActivity(new Intent(this,MainActivity.class));
     }
 
 
