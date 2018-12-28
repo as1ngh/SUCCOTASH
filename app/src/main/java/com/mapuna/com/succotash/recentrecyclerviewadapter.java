@@ -20,18 +20,18 @@ import android.widget.TextView;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.List;
 
 import static com.mapuna.com.succotash.R.color.colorPrimaryDark;
 
-public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.ViewHolder>{
+public class recentrecyclerviewadapter extends RecyclerView.Adapter<recentrecyclerviewadapter.ViewHolder>{
     Context mctx;
-    ArrayList<File>musicfiles;
+    List<Integer>musicfiles;
     importantelements ie=new importantelements();
     MediaMetadataRetriever metadataRetriever;
-    CustomItemClickListener listener;
+    onclick listener;
 
-
-    public RecyclerViewAdapter(Context mctx,ArrayList<File>musicfiles,CustomItemClickListener listener) {
+    public recentrecyclerviewadapter(Context mctx,List<Integer> musicfiles , onclick listener) {
         this.mctx=mctx;
         this.musicfiles=musicfiles;
         this.listener=listener;
@@ -48,7 +48,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     @Override
     public void onBindViewHolder(@NonNull final ViewHolder viewHolder, final int i) {
         metadataRetriever =new MediaMetadataRetriever();
-        metadataRetriever.setDataSource(musicfiles.get(i).getAbsolutePath());
+        metadataRetriever.setDataSource(ie.mysongs.get(musicfiles.get(i)).getAbsolutePath());
 
         if( metadataRetriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_ARTIST)==null){
             viewHolder.artistname.setText("<unknown>");
@@ -68,24 +68,14 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
 
         Typeface musicfont=Typeface.createFromAsset(mctx.getAssets(),"fonts/Quicksand-Regular.ttf");
-        viewHolder.musicname.setText(musicfiles.get(i).getName().replace(".mp3",""));
+        viewHolder.musicname.setText(ie.mysongs.get(musicfiles.get(i)).getName().replace(".mp3",""));
         viewHolder.musicname.setTypeface(musicfont);
-        Log.d("onBindcalled", "onBindViewHolder: ok ");
 
-        if(ie.currentpos==i){
-            viewHolder.rt.setBackgroundColor(mctx.getResources().getColor(R.color.colorPrimary));
-            viewHolder.musicname.setTextColor(mctx.getResources().getColor(R.color.white));
-        }
-        else{
-            viewHolder.rt.setBackgroundColor(mctx.getResources().getColor(R.color.white));
-            viewHolder.musicname.setTextColor(mctx.getResources().getColor(R.color.black));
-        }
         viewHolder.rt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //ie.recently.add(i);
-                listener.onItemClick(i);
-                ie.currentpos=i;
+                ie.currentpos=musicfiles.get(i);
+                listener.onclick(ie.currentpos);
                 notifyDataSetChanged();
             }
         });
@@ -114,11 +104,9 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     }
 
 
-    public interface CustomItemClickListener {
-        public void onItemClick(int position);
+    public interface onclick{
+        public void onclick(int pos);
     }
-
-
 
 
 

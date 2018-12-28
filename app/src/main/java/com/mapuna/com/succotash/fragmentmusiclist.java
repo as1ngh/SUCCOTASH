@@ -1,9 +1,11 @@
 package com.mapuna.com.succotash;
 
 import android.app.ListActivity;
+import android.content.Context;
 import android.content.Intent;
 import android.media.MediaPlayer;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
 import android.support.annotation.NonNull;
@@ -20,6 +22,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -33,10 +36,13 @@ import static android.content.Intent.FLAG_ACTIVITY_SINGLE_TOP;
 
 public class fragmentmusiclist extends Fragment  {
     View view;
-    static RecyclerView musicnames;
+    RecyclerView musicnames;
     importantelements ie=new importantelements();
+    gotinput got;
+    RecyclerViewAdapter adapter;
 
     public fragmentmusiclist() {
+
     }
 
 
@@ -46,11 +52,10 @@ public class fragmentmusiclist extends Fragment  {
         view=inflater.inflate(R.layout.musiclist_fragment,container,false);
 
         musicnames= (RecyclerView) view.findViewById(R.id.musicl);
+        musicnames.addOnScrollListener(new CustomScrollListener());
+        Asynctask task =new Asynctask();
+        task.execute();
 
-        ie.mysongs=findsong(Environment.getExternalStorageDirectory());
-        RecyclerViewAdapter adapter=new RecyclerViewAdapter(getActivity(),ie.mysongs);
-        musicnames.setAdapter(adapter);
-        musicnames.setLayoutManager(new LinearLayoutManager(getActivity()));
 
 
 
@@ -91,6 +96,100 @@ public class fragmentmusiclist extends Fragment  {
         }
         return arrayList;
     }
+
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        if (context instanceof gotinput) {
+            got = (gotinput) context;
+        } else {
+            throw new RuntimeException(context.toString()
+                    + " must implement FragmentAListener");
+        }
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        got = null;
+    }
+
+    public interface gotinput{
+        public void getupdate(int i);
+        public void scrollup();
+        public void scrolldown();
+    }
+
+    public class Asynctask extends AsyncTask<Void,Void,Void>{
+
+        @Override
+        protected Void doInBackground(Void... voids) {
+            ie.mysongs=findsong(Environment.getExternalStorageDirectory());
+            publishProgress();
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            super.onPostExecute(aVoid);
+        }
+
+        @Override
+        protected void onProgressUpdate(Void... values) {
+            super.onProgressUpdate(values);
+            adapter=new RecyclerViewAdapter(getActivity(), ie.mysongs, new RecyclerViewAdapter.CustomItemClickListener() {
+                @Override
+                public void onItemClick(int position) {
+                    got.getupdate(position);
+
+                }
+            });
+            musicnames.setAdapter(adapter);
+            musicnames.setLayoutManager(new LinearLayoutManager(getActivity()));
+        }
+    }
+
+    public class CustomScrollListener extends RecyclerView.OnScrollListener {
+        public CustomScrollListener() {
+        }
+
+        public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+            switch (newState) {
+                case RecyclerView.SCROLL_STATE_IDLE:
+                    System.out.println("The RecyclerView is not scrolling");
+                    break;
+                case RecyclerView.SCROLL_STATE_DRAGGING:
+                    System.out.println("Scrolling now");
+                    break;
+                case RecyclerView.SCROLL_STATE_SETTLING:
+                    System.out.println("Scroll Settling");
+                    break;
+
+            }
+
+        }
+
+        public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+            if (dx > 0) {
+                System.out.println("Scrolled Right");
+            } else if (dx < 0) {
+                System.out.println("Scrolled Left");
+            } else {
+                System.out.println("No Horizontal Scrolled");
+            }
+
+            if (dy > 0) {
+                got.scrolldown();
+            } else if (dy < 0) {
+                got.scrollup();
+            } else {
+                System.out.println("No Vertical Scrolled");
+            }
+        }
+    }
+
+
 
 
 

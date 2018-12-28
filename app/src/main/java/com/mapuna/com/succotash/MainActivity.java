@@ -1,11 +1,18 @@
 package com.mapuna.com.succotash;
 
 import android.Manifest;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.Intent;
+import android.os.Build;
+import android.os.Handler;
+import android.support.v4.app.NotificationCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.RelativeLayout;
+import android.widget.RemoteViews;
 
 import com.karumi.dexter.Dexter;
 import com.karumi.dexter.PermissionToken;
@@ -18,6 +25,7 @@ import java.io.File;
 
 public class MainActivity extends AppCompatActivity {
 
+
     RelativeLayout rt;
     File file=null;
 
@@ -29,18 +37,23 @@ public class MainActivity extends AppCompatActivity {
         rt=(RelativeLayout)findViewById(R.id.homelay);
 
         permission();
+
+        stopService(new Intent(this,MyService.class));
     }
 
     public void permission () {
         Dexter.withActivity(this).withPermission(Manifest.permission.READ_EXTERNAL_STORAGE).withListener(new PermissionListener() {
             @Override
             public void onPermissionGranted(PermissionGrantedResponse response) {
-                rt.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        startActivity(new Intent(MainActivity.this,musiclist_activity.class).putExtra("filename",file));
+                Handler handler = new Handler();
+                handler.postDelayed(new Runnable() {
+                    public void run() {
+                        finish();
+                        Intent i3 = new Intent(MainActivity.this, musiclist_activity.class);
+                        startActivity(i3.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
+                        finish();
                     }
-                });
+                }, 1000);
             }
             @Override
             public void onPermissionDenied(PermissionDeniedResponse response) {
@@ -51,5 +64,12 @@ public class MainActivity extends AppCompatActivity {
             }
         }).check();
     }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        startService(new Intent(this,MyService.class));
+    }
+
 
 }
