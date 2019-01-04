@@ -1,45 +1,31 @@
-package com.mapuna.com.succotash;
+package com.mapuna.com.succotash.fragments;
 
-import android.app.ListActivity;
 import android.content.Context;
-import android.content.Intent;
-import android.media.MediaPlayer;
-import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.LinearLayout;
-import android.widget.ListView;
-import android.widget.Toast;
+
+import com.mapuna.com.succotash.R;
+import com.mapuna.com.succotash.adapters.RecyclerViewAdapter;
+import com.mapuna.com.succotash.importantElements;
 
 import java.io.File;
 import java.util.ArrayList;
 
-import static android.R.layout.simple_list_item_1;
-import static android.content.Intent.FLAG_ACTIVITY_NO_USER_ACTION;
-import static android.content.Intent.FLAG_ACTIVITY_REORDER_TO_FRONT;
-import static android.content.Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED;
-import static android.content.Intent.FLAG_ACTIVITY_RETAIN_IN_RECENTS;
-import static android.content.Intent.FLAG_ACTIVITY_SINGLE_TOP;
-
 public class fragmentmusiclist extends Fragment  {
     View view;
     RecyclerView musicnames;
-    importantelements ie=new importantelements();
     gotinput got;
-    RecyclerViewAdapter adapter;
+    public RecyclerViewAdapter adapter;
 
     public fragmentmusiclist() {
 
@@ -51,13 +37,10 @@ public class fragmentmusiclist extends Fragment  {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         view=inflater.inflate(R.layout.musiclist_fragment,container,false);
 
-        musicnames= (RecyclerView) view.findViewById(R.id.musicl);
+        musicnames= view.findViewById(R.id.musicl);
         musicnames.addOnScrollListener(new CustomScrollListener());
         Asynctask task =new Asynctask();
         task.execute();
-
-
-
 
        /* musicnames.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -116,33 +99,27 @@ public class fragmentmusiclist extends Fragment  {
     }
 
     public interface gotinput{
-        public void getupdate(int i);
-        public void scrollup();
-        public void scrolldown();
+        void getupdate(int i);
+        void scrollup();
+        void scrolldown();
     }
 
     public class Asynctask extends AsyncTask<Void,Void,Void>{
 
         @Override
         protected Void doInBackground(Void... voids) {
-            ie.mysongs=findsong(Environment.getExternalStorageDirectory());
+            importantElements.mysongs =findsong(Environment.getExternalStorageDirectory());
             publishProgress();
             return null;
         }
 
         @Override
-        protected void onPostExecute(Void aVoid) {
-            super.onPostExecute(aVoid);
-        }
-
-        @Override
         protected void onProgressUpdate(Void... values) {
             super.onProgressUpdate(values);
-            adapter=new RecyclerViewAdapter(getActivity(), ie.mysongs, new RecyclerViewAdapter.CustomItemClickListener() {
+            adapter=new RecyclerViewAdapter(getActivity(), importantElements.mysongs, new RecyclerViewAdapter.CustomItemClickListener() {
                 @Override
                 public void onItemClick(int position) {
                     got.getupdate(position);
-
                 }
             });
             musicnames.setAdapter(adapter);
@@ -154,7 +131,7 @@ public class fragmentmusiclist extends Fragment  {
         public CustomScrollListener() {
         }
 
-        public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+        public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
             switch (newState) {
                 case RecyclerView.SCROLL_STATE_IDLE:
                     System.out.println("The RecyclerView is not scrolling");
@@ -170,7 +147,7 @@ public class fragmentmusiclist extends Fragment  {
 
         }
 
-        public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+        public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
             if (dx > 0) {
                 System.out.println("Scrolled Right");
             } else if (dx < 0) {

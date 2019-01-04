@@ -1,6 +1,5 @@
 package com.mapuna.com.succotash;
 
-import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -12,7 +11,6 @@ import android.net.Uri;
 
 public class NotificationReciever extends BroadcastReceiver {
     MediaMetadataRetriever metadataRetriever;
-    importantelements ie=new importantelements();
 
     @Override
     public void onReceive(Context context, Intent intent) {
@@ -20,22 +18,22 @@ public class NotificationReciever extends BroadcastReceiver {
         int i=intent.getIntExtra("buttonno",-1);
          if(i==1)
          {
-             if(ie.currentpos!=0){
-                 ie.currentpos=ie.currentpos-1;
-                 ie.mp.stop();
-                 ie.mp.release();
-                 ie.mp=MediaPlayer.create(context,Uri.parse(ie.mysongs.get(ie.currentpos).getAbsolutePath()));
-                 ie.mp.start();
+             if(importantElements.currentpos !=0){
+                 importantElements.currentpos = importantElements.currentpos -1;
+                 importantElements.mp.stop();
+                 importantElements.mp.release();
+                 importantElements.mp =MediaPlayer.create(context,Uri.parse(importantElements.mysongs.get(importantElements.currentpos).getAbsolutePath()));
+                 importantElements.mp.start();
              }
              else{
-                 ie.currentpos=ie.mysongs.size()-1;
-                 ie.mp.stop();
-                 ie.mp.release();
-                 ie.mp=MediaPlayer.create(context,Uri.parse(ie.mysongs.get(ie.currentpos).getAbsolutePath()));
-                 ie.mp.start();
+                 importantElements.currentpos = importantElements.mysongs.size()-1;
+                 importantElements.mp.stop();
+                 importantElements.mp.release();
+                 importantElements.mp =MediaPlayer.create(context,Uri.parse(importantElements.mysongs.get(importantElements.currentpos).getAbsolutePath()));
+                 importantElements.mp.start();
              }
              metadataRetriever =new MediaMetadataRetriever();
-             metadataRetriever.setDataSource(ie.mysongs.get(ie.currentpos).getAbsolutePath());
+             metadataRetriever.setDataSource(importantElements.mysongs.get(importantElements.currentpos).getAbsolutePath());
 
              Bitmap artwork = BitmapFactory.decodeResource(context.getResources(), R.drawable.headphones);
              if(metadataRetriever.getEmbeddedPicture()!=null){
@@ -43,40 +41,42 @@ public class NotificationReciever extends BroadcastReceiver {
                          .decodeByteArray(metadataRetriever.getEmbeddedPicture(), 0, metadataRetriever.getEmbeddedPicture().length);
 
              }
-             ie.notification.setContentTitle(ie.mysongs.get(ie.currentpos).getName().replace(".mp3",""))
+             importantElements.notification.setContentTitle(importantElements.mysongs.get(importantElements.currentpos).getName().replace(".mp3",""))
                      .setLargeIcon(artwork);
-             ie.notificationManager.notify(2, ie.notification.build());
+             importantElements.notificationManager.notify(2, importantElements.notification.build());
          }
          else if(i==2)
          {
-             if(ie.mp.isPlaying())
-             {ie.mp.pause();
+             if(importantElements.mp.isPlaying())
+             {
+                 importantElements.mp.pause();
              }
              else
-             {ie.mp.start();
+             {
+                 importantElements.mp.start();
              }
 
 
-             ie.notificationManager.notify(2, ie.notification.build());
+             importantElements.notificationManager.notify(2, importantElements.notification.build());
          }
          else if(i==3){
-             if(ie.currentpos!=ie.mysongs.size()-1){
-                 ie.currentpos=ie.currentpos+1;
-                 ie.mp.stop();
-                 ie.mp.release();
-                 ie.mp=MediaPlayer.create(context,Uri.parse(ie.mysongs.get(ie.currentpos).getAbsolutePath()));
-                 ie.mp.start();
+             if(importantElements.currentpos != importantElements.mysongs.size()-1){
+                 importantElements.currentpos = importantElements.currentpos +1;
+                 importantElements.mp.stop();
+                 importantElements.mp.release();
+                 importantElements.mp =MediaPlayer.create(context,Uri.parse(importantElements.mysongs.get(importantElements.currentpos).getAbsolutePath()));
+                 importantElements.mp.start();
              }
              else{
-                 ie.currentpos=0;
-                 ie.mp.stop();
-                 ie.mp.release();
-                 ie.mp=MediaPlayer.create(context,Uri.parse(ie.mysongs.get(ie.currentpos).getAbsolutePath()));
-                 ie.mp.start();
+                 importantElements.currentpos =0;
+                 importantElements.mp.stop();
+                 importantElements.mp.release();
+                 importantElements.mp =MediaPlayer.create(context,Uri.parse(importantElements.mysongs.get(importantElements.currentpos).getAbsolutePath()));
+                 importantElements.mp.start();
              }
 
              metadataRetriever =new MediaMetadataRetriever();
-             metadataRetriever.setDataSource(ie.mysongs.get(ie.currentpos).getAbsolutePath());
+             metadataRetriever.setDataSource(importantElements.mysongs.get(importantElements.currentpos).getAbsolutePath());
 
              Bitmap artwork = BitmapFactory.decodeResource(context.getResources(), R.drawable.headphones);
              if(metadataRetriever.getEmbeddedPicture()!=null){
@@ -84,30 +84,30 @@ public class NotificationReciever extends BroadcastReceiver {
                          .decodeByteArray(metadataRetriever.getEmbeddedPicture(), 0, metadataRetriever.getEmbeddedPicture().length);
 
              }
-             ie.notification.setContentTitle(ie.mysongs.get(ie.currentpos).getName().replace(".mp3",""))
+             importantElements.notification.setContentTitle(importantElements.mysongs.get(importantElements.currentpos).getName().replace(".mp3",""))
                              .setLargeIcon(artwork);
-             ie.notificationManager.notify(2, ie.notification.build());
+             importantElements.notificationManager.notify(2, importantElements.notification.build());
          }
          else if (i==4){
-             int pos=ie.mp.getCurrentPosition();
-             if(pos+10000>ie.mp.getDuration()){
-                 pos=ie.mp.getDuration();
+             int pos= importantElements.mp.getCurrentPosition();
+             if(pos+10000> importantElements.mp.getDuration()){
+                 pos= importantElements.mp.getDuration();
              }
              else
                  pos=pos+10000;
 
-             ie.mp.seekTo(pos);
+             importantElements.mp.seekTo(pos);
         }
 
          else if (i==0){
-             int pos=ie.mp.getCurrentPosition();
+             int pos= importantElements.mp.getCurrentPosition();
              if(pos-10000<0){
                  pos=0;
              }
              else
                  pos=pos-10000;
 
-             ie.mp.seekTo(pos);
+             importantElements.mp.seekTo(pos);
          }
 
 
