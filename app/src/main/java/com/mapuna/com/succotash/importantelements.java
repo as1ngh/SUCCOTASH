@@ -7,6 +7,7 @@ import android.support.v4.app.NotificationCompat;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.List;
 
 public class importantelements {
 
@@ -16,5 +17,8 @@ public class importantelements {
     static int recyclerint;
     static NotificationCompat.Builder notification;
     static NotificationManager notificationManager;
+    static List<Integer> recently =new ArrayList<>();
+    static int shuffle=0;
+    static int looping=0;
 
 }

@@ -12,8 +12,7 @@
         android:layout_width="match_parent"
         android:layout_height="500dp"
         android:layout_alignParentTop="true"
-        android:background="@color/colorPrimaryDark"
-        android:gravity="center"
+        android:background="@color/colorPrimary"
         android:id="@+id/image_layout">
 
         <ImageView
@@ -21,7 +20,26 @@
             android:layout_width="200dp"
             android:layout_height="200dp"
             app:srcCompat="@drawable/headphones"
+            android:layout_centerInParent="true"
             />
+
+        <Button
+            android:id="@+id/shuffle"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_margin="10dp"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentBottom="true"
+            android:background="@drawable/shuffle" />
+
+        <Button
+            android:id="@+id/repeat"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentBottom="true"
+            android:layout_margin="10dp"
+            android:background="@drawable/repeat" />
 
     </RelativeLayout>
 

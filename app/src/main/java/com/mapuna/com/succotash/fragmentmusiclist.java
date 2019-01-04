@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.media.MediaPlayer;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
 import android.support.annotation.NonNull;
@@ -51,17 +52,10 @@ public class fragmentmusiclist extends Fragment  {
         view=inflater.inflate(R.layout.musiclist_fragment,container,false);
 
         musicnames= (RecyclerView) view.findViewById(R.id.musicl);
+        musicnames.addOnScrollListener(new CustomScrollListener());
+        Asynctask task =new Asynctask();
+        task.execute();
 
-        ie.mysongs=findsong(Environment.getExternalStorageDirectory());
-        adapter=new RecyclerViewAdapter(getActivity(), ie.mysongs, new RecyclerViewAdapter.CustomItemClickListener() {
-            @Override
-            public void onItemClick(int position) {
-                got.getupdate(position);
-
-            }
-        });
-        musicnames.setAdapter(adapter);
-        musicnames.setLayoutManager(new LinearLayoutManager(getActivity()));
 
 
 
@@ -123,7 +117,79 @@ public class fragmentmusiclist extends Fragment  {
 
     public interface gotinput{
         public void getupdate(int i);
+        public void scrollup();
+        public void scrolldown();
     }
+
+    public class Asynctask extends AsyncTask<Void,Void,Void>{
+
+        @Override
+        protected Void doInBackground(Void... voids) {
+            ie.mysongs=findsong(Environment.getExternalStorageDirectory());
+            publishProgress();
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            super.onPostExecute(aVoid);
+        }
+
+        @Override
+        protected void onProgressUpdate(Void... values) {
+            super.onProgressUpdate(values);
+            adapter=new RecyclerViewAdapter(getActivity(), ie.mysongs, new RecyclerViewAdapter.CustomItemClickListener() {
+                @Override
+                public void onItemClick(int position) {
+                    got.getupdate(position);
+
+                }
+            });
+            musicnames.setAdapter(adapter);
+            musicnames.setLayoutManager(new LinearLayoutManager(getActivity()));
+        }
+    }
+
+    public class CustomScrollListener extends RecyclerView.OnScrollListener {
+        public CustomScrollListener() {
+        }
+
+        public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+            switch (newState) {
+                case RecyclerView.SCROLL_STATE_IDLE:
+                    System.out.println("The RecyclerView is not scrolling");
+                    break;
+                case RecyclerView.SCROLL_STATE_DRAGGING:
+                    System.out.println("Scrolling now");
+                    break;
+                case RecyclerView.SCROLL_STATE_SETTLING:
+                    System.out.println("Scroll Settling");
+                    break;
+
+            }
+
+        }
+
+        public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+            if (dx > 0) {
+                System.out.println("Scrolled Right");
+            } else if (dx < 0) {
+                System.out.println("Scrolled Left");
+            } else {
+                System.out.println("No Horizontal Scrolled");
+            }
+
+            if (dy > 0) {
+                got.scrolldown();
+            } else if (dy < 0) {
+                got.scrollup();
+            } else {
+                System.out.println("No Vertical Scrolled");
+            }
+        }
+    }
+
+
 
 
 

@@ -5,11 +5,11 @@
     android:orientation="vertical"
     android:gravity="center">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="ALBUM LIST"
-        android:textSize="30dp"
-        android:textStyle="bold"/>
+    <android.support.v7.widget.RecyclerView
+        android:layout_height="match_parent"
+        android:layout_width="match_parent"
+        android:id="@+id/recent">
+
+    </android.support.v7.widget.RecyclerView>
 
 </LinearLayout>

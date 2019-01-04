@@ -14,6 +14,7 @@ import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.MediaController;
 import android.widget.TextView;
@@ -29,6 +30,8 @@ public class musicplayer extends AppCompatActivity implements musicController.Me
     ImageView art;
     TextView musicname;
     TextView artist;
+    Button shuffle;
+    Button repeat;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,7 +41,10 @@ public class musicplayer extends AppCompatActivity implements musicController.Me
         musicname=(TextView)findViewById(R.id.songname);
         artist=(TextView)findViewById(R.id.artistname);
         art =(ImageView)findViewById(R.id.musicart);
+        shuffle=(Button)findViewById(R.id.shuffle);
+        repeat=(Button)findViewById(R.id.repeat);
 
+        setsmallicon();
 
         //43-56(TO SET THE MUSIC NAME FROM FILE SOURCE AND SET MUSI ART BY METADATA RETERIEVER CLASS)
         metadataRetriever.setDataSource(ie.mysongs.get(ie.currentpos).getAbsolutePath());
@@ -70,6 +76,7 @@ public class musicplayer extends AppCompatActivity implements musicController.Me
                     ie.mp=MediaPlayer.create(getApplicationContext(),Uri.parse(ie.mysongs.get(ie.currentpos).getAbsolutePath()));
                     ie.mp.start();
                     update();
+                    ie.recently.add(0,ie.currentpos);
                 }
                 else{
                     ie.currentpos=0;
@@ -78,6 +85,7 @@ public class musicplayer extends AppCompatActivity implements musicController.Me
                     ie.mp=MediaPlayer.create(getApplicationContext(),Uri.parse(ie.mysongs.get(ie.currentpos).getAbsolutePath()));
                     ie.mp.start();
                     update();
+                    ie.recently.add(0,ie.currentpos);
                 }
 
             }
@@ -91,6 +99,7 @@ public class musicplayer extends AppCompatActivity implements musicController.Me
                     ie.mp.release();
                     ie.mp=MediaPlayer.create(getApplicationContext(),Uri.parse(ie.mysongs.get(ie.currentpos).getAbsolutePath()));
                     ie.mp.start();
+                    ie.recently.add(0,ie.currentpos);
                 update();
                 }
                 else{
@@ -99,6 +108,7 @@ public class musicplayer extends AppCompatActivity implements musicController.Me
                     ie.mp.release();
                     ie.mp=MediaPlayer.create(getApplicationContext(),Uri.parse(ie.mysongs.get(ie.currentpos).getAbsolutePath()));
                     ie.mp.start();
+                    ie.recently.add(0,ie.currentpos);
                 update();
                 }
             }
@@ -106,6 +116,36 @@ public class musicplayer extends AppCompatActivity implements musicController.Me
         mMediaController.setMediaPlayer(musicplayer.this);
         mMediaController.setAnchorView((ViewGroup) findViewById(R.id.audioView));
         mMediaController.show(10000);
+
+        shuffle.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ie.looping=0;
+                if(ie.shuffle==0){
+                    ie.shuffle=1;
+                }
+                else if(ie.shuffle==1){
+                    ie.shuffle=0;
+                }
+                setsmallicon();
+            }
+        });
+
+        repeat.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ie.shuffle=0;
+                if(ie.looping==0){
+                    ie.looping=1;
+                }
+                else if(ie.looping==1){
+                    ie.looping=0;
+                }
+                setsmallicon();
+            }
+        });
+
+
 
 
 
@@ -132,6 +172,7 @@ public class musicplayer extends AppCompatActivity implements musicController.Me
                     ie.mp.stop();
                     ie.mp.release();
                     ie.mp=MediaPlayer.create(getApplicationContext(),Uri.parse(ie.mysongs.get(ie.currentpos).getAbsolutePath()));
+                    ie.recently.add(0,ie.currentpos);
                     ie.mp.start();
                 }
                 else{
@@ -139,11 +180,29 @@ public class musicplayer extends AppCompatActivity implements musicController.Me
                     ie.mp.stop();
                     ie.mp.release();
                     ie.mp=MediaPlayer.create(getApplicationContext(),Uri.parse(ie.mysongs.get(ie.currentpos).getAbsolutePath()));
+                    ie.recently.add(0,ie.currentpos);
                     ie.mp.start();
                 }
                 update();
             }
         });
+    }
+
+    public void setsmallicon(){
+        if(ie.shuffle==1 && ie.looping==0){
+            shuffle.setBackground(getResources().getDrawable(R.drawable.ic_shuffle_black_24dp));
+            repeat.setBackground(getResources().getDrawable(R.drawable.repeat));
+        }
+        else if(ie.shuffle==0 && ie.looping==0){
+            shuffle.setBackground(getResources().getDrawable(R.drawable.shuffle));
+            repeat.setBackground(getResources().getDrawable(R.drawable.repeat));
+        }
+        else if(ie.shuffle==0 && ie.looping==1){
+            shuffle.setBackground(getResources().getDrawable(R.drawable.shuffle));
+            repeat.setBackground(getResources().getDrawable(R.drawable.ic_repeat_black_24dp));
+        }
+
+
     }
 
 
@@ -176,6 +235,7 @@ public class musicplayer extends AppCompatActivity implements musicController.Me
                     ie.mp.release();
                     ie.mp=MediaPlayer.create(getApplicationContext(),Uri.parse(ie.mysongs.get(ie.currentpos).getAbsolutePath()));
                     ie.mp.start();
+                    ie.recently.add(0,ie.currentpos);
                 }
                 else{
                     ie.currentpos=0;
@@ -183,6 +243,7 @@ public class musicplayer extends AppCompatActivity implements musicController.Me
                     ie.mp.release();
                     ie.mp=MediaPlayer.create(getApplicationContext(),Uri.parse(ie.mysongs.get(ie.currentpos).getAbsolutePath()));
                     ie.mp.start();
+                    ie.recently.add(0,ie.currentpos);
                 }
                 update();
             }
@@ -265,6 +326,8 @@ public class musicplayer extends AppCompatActivity implements musicController.Me
 
         return false;
     }
+
+
 
 
 

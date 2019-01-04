@@ -1,5 +1,6 @@
 package com.mapuna.com.succotash;
 
+import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -54,6 +55,8 @@ public class NotificationReciever extends BroadcastReceiver {
              else
              {ie.mp.start();
              }
+
+
              ie.notificationManager.notify(2, ie.notification.build());
          }
          else if(i==3){
