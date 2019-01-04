@@ -21,6 +21,8 @@ import com.mapuna.com.succotash.R;
 import com.mapuna.com.succotash.importantelements;
 import com.mapuna.com.succotash.musicController;
 
+import java.util.Random;
+
 
 public class musicplayer extends AppCompatActivity implements musicController.MediaPlayerControl {
     importantelements ie=new importantelements();
@@ -70,11 +72,7 @@ public class musicplayer extends AppCompatActivity implements musicController.Me
                 Log.d("NEXT", "onClick:next");
                 //Handle next click here
                 if(ie.currentpos!=ie.mysongs.size()-1){
-                    ie.currentpos=ie.currentpos+1;
-                    ie.mp.stop();
-                    ie.mp.release();
-                    ie.mp=MediaPlayer.create(getApplicationContext(),Uri.parse(ie.mysongs.get(ie.currentpos).getAbsolutePath()));
-                    ie.mp.start();
+                    getnextsong();
                     update();
                     ie.recently.add(0,ie.currentpos);
                 }
@@ -186,6 +184,22 @@ public class musicplayer extends AppCompatActivity implements musicController.Me
                 update();
             }
         });
+    }
+
+
+    public void getnextsong(){
+        if(ie.looping==1){
+            ie.mp.stop();
+            ie.mp.start();
+        }
+        else if(ie.shuffle==1){
+            ie.currentpos=new Random().nextInt(ie.mysongs.size());
+            ie.mp.stop();
+            ie.mp.release();
+            ie.mp=null;
+            ie.mp=MediaPlayer.create(getApplicationContext(),Uri.parse(ie.mysongs.get(ie.currentpos).getAbsolutePath()));
+            ie.mp.start();
+        }
     }
 
     public void setsmallicon(){
