@@ -1,4 +1,4 @@
-package com.mapuna.com.succotash;
+package com.mapuna.com.succotash.adapters;
 
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;

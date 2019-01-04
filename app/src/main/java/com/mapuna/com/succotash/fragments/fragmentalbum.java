@@ -1,8 +1,7 @@
-package com.mapuna.com.succotash;
+package com.mapuna.com.succotash.fragments;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.os.Environment;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -12,10 +11,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.mapuna.com.succotash.R;
+import com.mapuna.com.succotash.importantelements;
+import com.mapuna.com.succotash.adapters.recentrecyclerviewadapter;
+
 public class fragmentalbum extends Fragment {
     View view;
     RecyclerView musicnames;
-    recentrecyclerviewadapter adapter;
+    public recentrecyclerviewadapter adapter;
     importantelements ie;
     gotinput2 got;
 

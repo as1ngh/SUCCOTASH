@@ -1,7 +1,6 @@
-package com.mapuna.com.succotash;
+package com.mapuna.com.succotash.activities;
 
 
-import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.media.MediaMetadataRetriever;
@@ -16,10 +15,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.MediaController;
 import android.widget.TextView;
 
-import java.io.IOException;
+import com.mapuna.com.succotash.R;
+import com.mapuna.com.succotash.importantelements;
+import com.mapuna.com.succotash.musicController;
 
 
 public class musicplayer extends AppCompatActivity implements musicController.MediaPlayerControl {

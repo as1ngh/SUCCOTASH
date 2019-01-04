@@ -11,14 +11,14 @@ import java.util.List;
 
 public class importantelements {
 
-    static MediaPlayer mp;
-    static ArrayList<File>mysongs;
-    static int currentpos = -1;
+    public static MediaPlayer mp;
+    public static ArrayList<File>mysongs;
+    public static int currentpos = -1;
     static int recyclerint;
     static NotificationCompat.Builder notification;
     static NotificationManager notificationManager;
-    static List<Integer> recently =new ArrayList<>();
-    static int shuffle=0;
-    static int looping=0;
+    public static List<Integer> recently =new ArrayList<>();
+    public static int shuffle=0;
+    public static int looping=0;
 
 }

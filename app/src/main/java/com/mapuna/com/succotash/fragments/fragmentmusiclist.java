@@ -1,45 +1,32 @@
-package com.mapuna.com.succotash;
+package com.mapuna.com.succotash.fragments;
 
-import android.app.ListActivity;
 import android.content.Context;
-import android.content.Intent;
-import android.media.MediaPlayer;
-import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.LinearLayout;
-import android.widget.ListView;
-import android.widget.Toast;
+
+import com.mapuna.com.succotash.R;
+import com.mapuna.com.succotash.adapters.RecyclerViewAdapter;
+import com.mapuna.com.succotash.importantelements;
 
 import java.io.File;
 import java.util.ArrayList;
-
-import static android.R.layout.simple_list_item_1;
-import static android.content.Intent.FLAG_ACTIVITY_NO_USER_ACTION;
-import static android.content.Intent.FLAG_ACTIVITY_REORDER_TO_FRONT;
-import static android.content.Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED;
-import static android.content.Intent.FLAG_ACTIVITY_RETAIN_IN_RECENTS;
-import static android.content.Intent.FLAG_ACTIVITY_SINGLE_TOP;
 
 public class fragmentmusiclist extends Fragment  {
     View view;
     RecyclerView musicnames;
     importantelements ie=new importantelements();
     gotinput got;
-    RecyclerViewAdapter adapter;
+    public RecyclerViewAdapter adapter;
 
     public fragmentmusiclist() {
 
