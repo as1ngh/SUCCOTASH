@@ -32,6 +32,7 @@ import com.mapuna.com.succotash.importantElements;
 
 import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Random;
 import java.util.Set;
 
 public class musiclist_activity extends AppCompatActivity implements fragmentmusiclist.gotinput , fragmentalbum.gotinput2{
@@ -176,6 +177,48 @@ public class musiclist_activity extends AppCompatActivity implements fragmentmus
 
     }
 
+    public void getnextsong(){
+        if(importantElements.looping ==1){
+            importantElements.mp.stop();
+            importantElements.mp.release();
+            importantElements.mp =null;
+            importantElements.mp =MediaPlayer.create(getApplicationContext(),Uri.parse(importantElements.mysongs.get(importantElements.currentpos).getAbsolutePath()));
+            importantElements.mp.start();
+        }
+        else if(importantElements.shuffle ==1){
+            importantElements.currentpos =new Random().nextInt(importantElements.mysongs.size());
+            importantElements.mp.stop();
+            importantElements.mp.release();
+            importantElements.mp =null;
+            importantElements.mp =MediaPlayer.create(getApplicationContext(),Uri.parse(importantElements.mysongs.get(importantElements.currentpos).getAbsolutePath()));
+            importantElements.mp.start();
+        }
+        else if(importantElements.shuffle==0 && importantElements.looping==0){
+            if(importantElements.currentpos != importantElements.mysongs.size()-1){
+                importantElements.currentpos=importantElements.currentpos+1;
+                importantElements.mp.stop();
+                importantElements.mp.release();
+                importantElements.mp =null;
+                importantElements.mp =MediaPlayer.create(getApplicationContext(),Uri.parse(importantElements.mysongs.get(importantElements.currentpos).getAbsolutePath()));
+                importantElements.mp.start();
+                importantElements.recently.add(0, importantElements.currentpos);
+            }
+            else{
+                importantElements.currentpos =0;
+                importantElements.mp.stop();
+                importantElements.mp.release();
+                importantElements.mp =MediaPlayer.create(getApplicationContext(),Uri.parse(importantElements.mysongs.get(importantElements.currentpos).getAbsolutePath()));
+                importantElements.mp.start();
+                importantElements.recently.add(0, importantElements.currentpos);
+            }
+        }
+        update(importantElements.currentpos);
+        importantElements.recently.add(0, importantElements.currentpos);
+        importantElements.recently =removeDuplicates(importantElements.recently);
+        fragAlbum.adapter.notifyDataSetChanged();
+        fragMusicList.adapter.notifyDataSetChanged();
+    }
+
 
     void update(int i){
         metadataRetriever =new MediaMetadataRetriever();
@@ -223,27 +266,7 @@ public class musiclist_activity extends AppCompatActivity implements fragmentmus
         importantElements.mp.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
             @Override
             public void onCompletion(MediaPlayer mp) {
-                if(importantElements.currentpos != importantElements.mysongs.size()-1){
-                    importantElements.currentpos = importantElements.currentpos +1;
-                    importantElements.mp.stop();
-                    importantElements.mp.release();
-                    importantElements.mp =MediaPlayer.create(getApplicationContext(),Uri.parse(importantElements.mysongs.get(importantElements.currentpos).getAbsolutePath()));
-                    importantElements.recently.add(0, importantElements.currentpos);
-                    importantElements.recently =removeDuplicates(importantElements.recently);
-                    importantElements.mp.start();
-                }
-                else{
-                    importantElements.currentpos =0;
-                    importantElements.mp.stop();
-                    importantElements.mp.release();
-                    importantElements.mp =MediaPlayer.create(getApplicationContext(),Uri.parse(importantElements.mysongs.get(importantElements.currentpos).getAbsolutePath()));
-                    importantElements.mp.start();
-                    importantElements.recently.add(0, importantElements.currentpos);
-                    importantElements.recently =removeDuplicates(importantElements.recently);
-                }
-                update(importantElements.currentpos);
-                fragMusicList.adapter.notifyDataSetChanged();
-
+                getnextsong();
             }
         });
     }
@@ -275,8 +298,6 @@ public class musiclist_activity extends AppCompatActivity implements fragmentmus
         update(i);
         importantElements.recently.add(0,i);
         importantElements.recently =removeDuplicates(importantElements.recently);
-
-
         fragAlbum.adapter.notifyDataSetChanged();
         //Toast.makeText(getApplicationContext(), "No Music Selected"+i, Toast.LENGTH_LONG).show();
     }
@@ -336,23 +357,7 @@ public class musiclist_activity extends AppCompatActivity implements fragmentmus
             importantElements.mp.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
                 @Override
                 public void onCompletion(MediaPlayer mp) {
-                    if(importantElements.currentpos != importantElements.mysongs.size()-1){
-                        importantElements.currentpos = importantElements.currentpos +1;
-                        importantElements.mp.stop();
-                        importantElements.mp.release();
-                        importantElements.mp =MediaPlayer.create(getApplicationContext(),Uri.parse(importantElements.mysongs.get(importantElements.currentpos).getAbsolutePath()));
-                        importantElements.mp.start();
-                    }
-                    else{
-                        importantElements.currentpos =0;
-                        importantElements.mp.stop();
-                        importantElements.mp.release();
-                        importantElements.mp =MediaPlayer.create(getApplicationContext(),Uri.parse(importantElements.mysongs.get(importantElements.currentpos).getAbsolutePath()));
-                        importantElements.mp.start();
-                    }
-                    update(importantElements.currentpos);
-                    fragMusicList.adapter.notifyDataSetChanged();
-
+                    getnextsong();
                 }
             });
         }
