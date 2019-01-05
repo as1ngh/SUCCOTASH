@@ -161,6 +161,7 @@ public class musicplayer extends AppCompatActivity implements musicController.Me
             importantElements.mp.stop();
             importantElements.mp.release();
             importantElements.mp =null;
+            importantElements.recently.add(0, importantElements.currentpos);
             importantElements.mp =MediaPlayer.create(getApplicationContext(),Uri.parse(importantElements.mysongs.get(importantElements.currentpos).getAbsolutePath()));
             importantElements.mp.start();
         }
@@ -169,6 +170,7 @@ public class musicplayer extends AppCompatActivity implements musicController.Me
             importantElements.mp.stop();
             importantElements.mp.release();
             importantElements.mp =null;
+            importantElements.recently.add(0, importantElements.currentpos);
             importantElements.mp =MediaPlayer.create(getApplicationContext(),Uri.parse(importantElements.mysongs.get(importantElements.currentpos).getAbsolutePath()));
             importantElements.mp.start();
         }

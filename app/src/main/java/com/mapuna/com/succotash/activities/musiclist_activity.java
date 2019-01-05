@@ -201,7 +201,6 @@ public class musiclist_activity extends AppCompatActivity implements fragmentmus
                 importantElements.mp =null;
                 importantElements.mp =MediaPlayer.create(getApplicationContext(),Uri.parse(importantElements.mysongs.get(importantElements.currentpos).getAbsolutePath()));
                 importantElements.mp.start();
-                importantElements.recently.add(0, importantElements.currentpos);
             }
             else{
                 importantElements.currentpos =0;
@@ -209,7 +208,6 @@ public class musiclist_activity extends AppCompatActivity implements fragmentmus
                 importantElements.mp.release();
                 importantElements.mp =MediaPlayer.create(getApplicationContext(),Uri.parse(importantElements.mysongs.get(importantElements.currentpos).getAbsolutePath()));
                 importantElements.mp.start();
-                importantElements.recently.add(0, importantElements.currentpos);
             }
         }
         update(importantElements.currentpos);
@@ -317,7 +315,10 @@ public class musiclist_activity extends AppCompatActivity implements fragmentmus
     @Override
     protected void onRestart() {
         super.onRestart();
+        
+        importantElements.recently =removeDuplicates(importantElements.recently);
         fragAlbum.adapter.notifyDataSetChanged();
+
         if(importantElements.mp !=null){
             metadataRetriever =new MediaMetadataRetriever();
             metadataRetriever.setDataSource(importantElements.mysongs.get(importantElements.currentpos).getAbsolutePath());
