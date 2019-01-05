@@ -42,9 +42,6 @@ public class fragmentmusiclist extends Fragment  {
         Asynctask task =new Asynctask();
         task.execute();
 
-
-
-
        /* musicnames.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -123,7 +120,6 @@ public class fragmentmusiclist extends Fragment  {
                 @Override
                 public void onItemClick(int position) {
                     got.getupdate(position);
-
                 }
             });
             musicnames.setAdapter(adapter);

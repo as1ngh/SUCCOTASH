@@ -163,7 +163,6 @@ public class musiclist_activity extends AppCompatActivity implements fragmentmus
         });
 
 
-
         music.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -173,7 +172,6 @@ public class musiclist_activity extends AppCompatActivity implements fragmentmus
                      startActivity(new Intent(getApplicationContext(),musicplayer.class));
             }
         });
-
 
     }
 
@@ -315,7 +313,6 @@ public class musiclist_activity extends AppCompatActivity implements fragmentmus
     @Override
     protected void onRestart() {
         super.onRestart();
-        
         importantElements.recently =removeDuplicates(importantElements.recently);
         fragAlbum.adapter.notifyDataSetChanged();
 
