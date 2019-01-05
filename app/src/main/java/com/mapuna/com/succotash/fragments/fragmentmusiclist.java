@@ -16,7 +16,7 @@ import android.view.ViewGroup;
 
 import com.mapuna.com.succotash.R;
 import com.mapuna.com.succotash.adapters.RecyclerViewAdapter;
-import com.mapuna.com.succotash.importantelements;
+import com.mapuna.com.succotash.importantElements;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -24,7 +24,6 @@ import java.util.ArrayList;
 public class fragmentmusiclist extends Fragment  {
     View view;
     RecyclerView musicnames;
-    importantelements ie=new importantelements();
     gotinput got;
     public RecyclerViewAdapter adapter;
 
@@ -38,7 +37,7 @@ public class fragmentmusiclist extends Fragment  {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         view=inflater.inflate(R.layout.musiclist_fragment,container,false);
 
-        musicnames= (RecyclerView) view.findViewById(R.id.musicl);
+        musicnames= view.findViewById(R.id.musicl);
         musicnames.addOnScrollListener(new CustomScrollListener());
         Asynctask task =new Asynctask();
         task.execute();
@@ -103,29 +102,24 @@ public class fragmentmusiclist extends Fragment  {
     }
 
     public interface gotinput{
-        public void getupdate(int i);
-        public void scrollup();
-        public void scrolldown();
+        void getupdate(int i);
+        void scrollup();
+        void scrolldown();
     }
 
     public class Asynctask extends AsyncTask<Void,Void,Void>{
 
         @Override
         protected Void doInBackground(Void... voids) {
-            ie.mysongs=findsong(Environment.getExternalStorageDirectory());
+            importantElements.mysongs =findsong(Environment.getExternalStorageDirectory());
             publishProgress();
             return null;
         }
 
         @Override
-        protected void onPostExecute(Void aVoid) {
-            super.onPostExecute(aVoid);
-        }
-
-        @Override
         protected void onProgressUpdate(Void... values) {
             super.onProgressUpdate(values);
-            adapter=new RecyclerViewAdapter(getActivity(), ie.mysongs, new RecyclerViewAdapter.CustomItemClickListener() {
+            adapter=new RecyclerViewAdapter(getActivity(), importantElements.mysongs, new RecyclerViewAdapter.CustomItemClickListener() {
                 @Override
                 public void onItemClick(int position) {
                     got.getupdate(position);
@@ -141,7 +135,7 @@ public class fragmentmusiclist extends Fragment  {
         public CustomScrollListener() {
         }
 
-        public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+        public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
             switch (newState) {
                 case RecyclerView.SCROLL_STATE_IDLE:
                     System.out.println("The RecyclerView is not scrolling");
@@ -157,7 +151,7 @@ public class fragmentmusiclist extends Fragment  {
 
         }
 
-        public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+        public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
             if (dx > 0) {
                 System.out.println("Scrolled Right");
             } else if (dx < 0) {

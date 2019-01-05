@@ -15,16 +15,14 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.mapuna.com.succotash.R;
-import com.mapuna.com.succotash.importantelements;
+import com.mapuna.com.succotash.importantElements;
 
 import java.util.List;
 
 public class recentrecyclerviewadapter extends RecyclerView.Adapter<recentrecyclerviewadapter.ViewHolder>{
-    Context mctx;
-    List<Integer>musicfiles;
-    importantelements ie=new importantelements();
-    MediaMetadataRetriever metadataRetriever;
-    onclick listener;
+    private Context mctx;
+    private List<Integer>musicfiles;
+    private onclick listener;
 
     public recentrecyclerviewadapter(Context mctx,List<Integer> musicfiles , onclick listener) {
         this.mctx=mctx;
@@ -36,14 +34,14 @@ public class recentrecyclerviewadapter extends RecyclerView.Adapter<recentrecycl
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
         View view=LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.mycustomlist,viewGroup,false);
-        ViewHolder holder=new ViewHolder(view);
-        return holder;
+        return new ViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(@NonNull final ViewHolder viewHolder, final int i) {
+        MediaMetadataRetriever metadataRetriever;
         metadataRetriever =new MediaMetadataRetriever();
-        metadataRetriever.setDataSource(ie.mysongs.get(musicfiles.get(i)).getAbsolutePath());
+        metadataRetriever.setDataSource(importantElements.mysongs.get(musicfiles.get(i)).getAbsolutePath());
 
         if( metadataRetriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_ARTIST)==null){
             viewHolder.artistname.setText("<unknown>");
@@ -63,14 +61,14 @@ public class recentrecyclerviewadapter extends RecyclerView.Adapter<recentrecycl
 
 
         Typeface musicfont=Typeface.createFromAsset(mctx.getAssets(),"fonts/Quicksand-Regular.ttf");
-        viewHolder.musicname.setText(ie.mysongs.get(musicfiles.get(i)).getName().replace(".mp3",""));
+        viewHolder.musicname.setText(importantElements.mysongs.get(musicfiles.get(i)).getName().replace(".mp3",""));
         viewHolder.musicname.setTypeface(musicfont);
 
         viewHolder.rt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ie.currentpos=musicfiles.get(i);
-                listener.onclick(ie.currentpos);
+                importantElements.currentpos =musicfiles.get(i);
+                listener.onClick(importantElements.currentpos);
                 notifyDataSetChanged();
             }
         });
@@ -91,16 +89,16 @@ public class recentrecyclerviewadapter extends RecyclerView.Adapter<recentrecycl
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
-            musicname=(TextView)itemView.findViewById(R.id.songname_id);
-            rt=(RelativeLayout)itemView.findViewById(R.id.list_btn);
-            artistname=(TextView)itemView.findViewById(R.id.artistname);
-            art=(ImageView)itemView.findViewById(R.id.art);
+            musicname= itemView.findViewById(R.id.songname_id);
+            rt= itemView.findViewById(R.id.list_btn);
+            artistname= itemView.findViewById(R.id.artistname);
+            art= itemView.findViewById(R.id.art);
         }
     }
 
 
     public interface onclick{
-        public void onclick(int pos);
+        void onClick(int pos);
     }
 
 

@@ -18,14 +18,13 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.mapuna.com.succotash.R;
-import com.mapuna.com.succotash.importantelements;
+import com.mapuna.com.succotash.importantElements;
 import com.mapuna.com.succotash.musicController;
 
 import java.util.Random;
 
 
 public class musicplayer extends AppCompatActivity implements musicController.MediaPlayerControl {
-    importantelements ie=new importantelements();
     private musicController mMediaController;
     private Handler mHandler = new Handler();
     MediaMetadataRetriever metadataRetriever =new MediaMetadataRetriever();
@@ -40,22 +39,22 @@ public class musicplayer extends AppCompatActivity implements musicController.Me
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_musicplayer);
 
-        musicname=(TextView)findViewById(R.id.songname);
-        artist=(TextView)findViewById(R.id.artistname);
-        art =(ImageView)findViewById(R.id.musicart);
-        shuffle=(Button)findViewById(R.id.shuffle);
-        repeat=(Button)findViewById(R.id.repeat);
+        musicname= findViewById(R.id.songname);
+        artist= findViewById(R.id.artistname);
+        art = findViewById(R.id.musicart);
+        shuffle= findViewById(R.id.shuffle);
+        repeat= findViewById(R.id.repeat);
 
         setsmallicon();
 
         //43-56(TO SET THE MUSIC NAME FROM FILE SOURCE AND SET MUSI ART BY METADATA RETERIEVER CLASS)
-        metadataRetriever.setDataSource(ie.mysongs.get(ie.currentpos).getAbsolutePath());
+        metadataRetriever.setDataSource(importantElements.mysongs.get(importantElements.currentpos).getAbsolutePath());
         if(metadataRetriever.getEmbeddedPicture()!=null){
             Bitmap songImage = BitmapFactory
                     .decodeByteArray(metadataRetriever.getEmbeddedPicture(), 0, metadataRetriever.getEmbeddedPicture().length);
             art.setImageBitmap(songImage);
         }
-        musicname.setText(ie.mysongs.get(ie.currentpos).getName());
+        musicname.setText(importantElements.mysongs.get(importantElements.currentpos).getName());
         if( metadataRetriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_ARTIST)==null){
             artist.setText("<unknown>");
         }
@@ -71,42 +70,28 @@ public class musicplayer extends AppCompatActivity implements musicController.Me
             public void onClick(View v) {
                 Log.d("NEXT", "onClick:next");
                 //Handle next click here
-                if(ie.currentpos!=ie.mysongs.size()-1){
-                    getnextsong();
-                    update();
-                    ie.recently.add(0,ie.currentpos);
-                }
-                else{
-                    ie.currentpos=0;
-                    ie.mp.stop();
-                    ie.mp.release();
-                    ie.mp=MediaPlayer.create(getApplicationContext(),Uri.parse(ie.mysongs.get(ie.currentpos).getAbsolutePath()));
-                    ie.mp.start();
-                    update();
-                    ie.recently.add(0,ie.currentpos);
-                }
-
+                getnextsong();
             }
         }, new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 //Handle previous click here
-                if(ie.currentpos!=0){
-                    ie.currentpos=ie.currentpos-1;
-                    ie.mp.stop();
-                    ie.mp.release();
-                    ie.mp=MediaPlayer.create(getApplicationContext(),Uri.parse(ie.mysongs.get(ie.currentpos).getAbsolutePath()));
-                    ie.mp.start();
-                    ie.recently.add(0,ie.currentpos);
+                if(importantElements.currentpos !=0){
+                    importantElements.currentpos = importantElements.currentpos -1;
+                    importantElements.mp.stop();
+                    importantElements.mp.release();
+                    importantElements.mp =MediaPlayer.create(getApplicationContext(),Uri.parse(importantElements.mysongs.get(importantElements.currentpos).getAbsolutePath()));
+                    importantElements.mp.start();
+                    importantElements.recently.add(0, importantElements.currentpos);
                 update();
                 }
                 else{
-                    ie.currentpos=ie.mysongs.size()-1;
-                    ie.mp.stop();
-                    ie.mp.release();
-                    ie.mp=MediaPlayer.create(getApplicationContext(),Uri.parse(ie.mysongs.get(ie.currentpos).getAbsolutePath()));
-                    ie.mp.start();
-                    ie.recently.add(0,ie.currentpos);
+                    importantElements.currentpos = importantElements.mysongs.size()-1;
+                    importantElements.mp.stop();
+                    importantElements.mp.release();
+                    importantElements.mp =MediaPlayer.create(getApplicationContext(),Uri.parse(importantElements.mysongs.get(importantElements.currentpos).getAbsolutePath()));
+                    importantElements.mp.start();
+                    importantElements.recently.add(0, importantElements.currentpos);
                 update();
                 }
             }
@@ -118,12 +103,12 @@ public class musicplayer extends AppCompatActivity implements musicController.Me
         shuffle.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ie.looping=0;
-                if(ie.shuffle==0){
-                    ie.shuffle=1;
+                importantElements.looping =0;
+                if(importantElements.shuffle ==0){
+                    importantElements.shuffle =1;
                 }
-                else if(ie.shuffle==1){
-                    ie.shuffle=0;
+                else if(importantElements.shuffle ==1){
+                    importantElements.shuffle =0;
                 }
                 setsmallicon();
             }
@@ -132,12 +117,12 @@ public class musicplayer extends AppCompatActivity implements musicController.Me
         repeat.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ie.shuffle=0;
-                if(ie.looping==0){
-                    ie.looping=1;
+                importantElements.shuffle =0;
+                if(importantElements.looping ==0){
+                    importantElements.looping =1;
                 }
-                else if(ie.looping==1){
-                    ie.looping=0;
+                else if(importantElements.looping ==1){
+                    importantElements.looping =0;
                 }
                 setsmallicon();
             }
@@ -148,13 +133,13 @@ public class musicplayer extends AppCompatActivity implements musicController.Me
 
 
 
-        ie.mp.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
+        importantElements.mp.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
             @Override
             public void onPrepared(MediaPlayer mp) {
                 mHandler.post(new Runnable() {
                     public void run() {
                         mMediaController.show(10000);
-                        ie.mp.start();
+                        importantElements.mp.start();
                     }
                 });
             }
@@ -162,56 +147,63 @@ public class musicplayer extends AppCompatActivity implements musicController.Me
 
 
         //TO AUTO START NEW SONG WHEN PREVIOUS SONG IS COMPLETED
-        ie.mp.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+        importantElements.mp.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
             @Override
             public void onCompletion(MediaPlayer mp) {
-                if(ie.currentpos!=ie.mysongs.size()-1){
-                    ie.currentpos=ie.currentpos+1;
-                    ie.mp.stop();
-                    ie.mp.release();
-                    ie.mp=MediaPlayer.create(getApplicationContext(),Uri.parse(ie.mysongs.get(ie.currentpos).getAbsolutePath()));
-                    ie.recently.add(0,ie.currentpos);
-                    ie.mp.start();
-                }
-                else{
-                    ie.currentpos=0;
-                    ie.mp.stop();
-                    ie.mp.release();
-                    ie.mp=MediaPlayer.create(getApplicationContext(),Uri.parse(ie.mysongs.get(ie.currentpos).getAbsolutePath()));
-                    ie.recently.add(0,ie.currentpos);
-                    ie.mp.start();
-                }
-                update();
+                getnextsong();
             }
         });
     }
 
 
     public void getnextsong(){
-        if(ie.looping==1){
-            ie.mp.stop();
-            ie.mp.start();
+        if(importantElements.looping ==1){
+            importantElements.mp.stop();
+            importantElements.mp.release();
+            importantElements.mp =null;
+            importantElements.mp =MediaPlayer.create(getApplicationContext(),Uri.parse(importantElements.mysongs.get(importantElements.currentpos).getAbsolutePath()));
+            importantElements.mp.start();
         }
-        else if(ie.shuffle==1){
-            ie.currentpos=new Random().nextInt(ie.mysongs.size());
-            ie.mp.stop();
-            ie.mp.release();
-            ie.mp=null;
-            ie.mp=MediaPlayer.create(getApplicationContext(),Uri.parse(ie.mysongs.get(ie.currentpos).getAbsolutePath()));
-            ie.mp.start();
+        else if(importantElements.shuffle ==1){
+            importantElements.currentpos =new Random().nextInt(importantElements.mysongs.size());
+            importantElements.mp.stop();
+            importantElements.mp.release();
+            importantElements.mp =null;
+            importantElements.mp =MediaPlayer.create(getApplicationContext(),Uri.parse(importantElements.mysongs.get(importantElements.currentpos).getAbsolutePath()));
+            importantElements.mp.start();
         }
+        else if(importantElements.shuffle==0 && importantElements.looping==0){
+            if(importantElements.currentpos != importantElements.mysongs.size()-1){
+                importantElements.currentpos=importantElements.currentpos+1;
+                importantElements.mp.stop();
+                importantElements.mp.release();
+                importantElements.mp =null;
+                importantElements.mp =MediaPlayer.create(getApplicationContext(),Uri.parse(importantElements.mysongs.get(importantElements.currentpos).getAbsolutePath()));
+                importantElements.mp.start();
+                importantElements.recently.add(0, importantElements.currentpos);
+            }
+            else{
+                importantElements.currentpos =0;
+                importantElements.mp.stop();
+                importantElements.mp.release();
+                importantElements.mp =MediaPlayer.create(getApplicationContext(),Uri.parse(importantElements.mysongs.get(importantElements.currentpos).getAbsolutePath()));
+                importantElements.mp.start();
+                importantElements.recently.add(0, importantElements.currentpos);
+            }
+        }
+        update();
     }
 
     public void setsmallicon(){
-        if(ie.shuffle==1 && ie.looping==0){
+        if(importantElements.shuffle ==1 && importantElements.looping ==0){
             shuffle.setBackground(getResources().getDrawable(R.drawable.ic_shuffle_black_24dp));
             repeat.setBackground(getResources().getDrawable(R.drawable.repeat));
         }
-        else if(ie.shuffle==0 && ie.looping==0){
+        else if(importantElements.shuffle ==0 && importantElements.looping ==0){
             shuffle.setBackground(getResources().getDrawable(R.drawable.shuffle));
             repeat.setBackground(getResources().getDrawable(R.drawable.repeat));
         }
-        else if(ie.shuffle==0 && ie.looping==1){
+        else if(importantElements.shuffle ==0 && importantElements.looping ==1){
             shuffle.setBackground(getResources().getDrawable(R.drawable.shuffle));
             repeat.setBackground(getResources().getDrawable(R.drawable.ic_repeat_black_24dp));
         }
@@ -221,7 +213,7 @@ public class musicplayer extends AppCompatActivity implements musicController.Me
 
 
     public void update(){
-        metadataRetriever.setDataSource(ie.mysongs.get(ie.currentpos).getAbsolutePath());
+        metadataRetriever.setDataSource(importantElements.mysongs.get(importantElements.currentpos).getAbsolutePath());
         if(metadataRetriever.getEmbeddedPicture()!=null){
             Bitmap songImage = BitmapFactory
                     .decodeByteArray(metadataRetriever.getEmbeddedPicture(), 0, metadataRetriever.getEmbeddedPicture().length);
@@ -231,7 +223,7 @@ public class musicplayer extends AppCompatActivity implements musicController.Me
             art.setImageDrawable(getDrawable(R.drawable.headphones));
         }
 
-        musicname.setText(ie.mysongs.get(ie.currentpos).getName());
+        musicname.setText(importantElements.mysongs.get(importantElements.currentpos).getName());
 
         if( metadataRetriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_ARTIST)==null){
             artist.setText("<unknown>");
@@ -240,26 +232,10 @@ public class musicplayer extends AppCompatActivity implements musicController.Me
             artist.setText(metadataRetriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_ARTIST));
         }
 
-        ie.mp.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+        importantElements.mp.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
             @Override
             public void onCompletion(MediaPlayer mp) {
-                if(ie.currentpos!=ie.mysongs.size()-1){
-                    ie.currentpos=ie.currentpos+1;
-                    ie.mp.stop();
-                    ie.mp.release();
-                    ie.mp=MediaPlayer.create(getApplicationContext(),Uri.parse(ie.mysongs.get(ie.currentpos).getAbsolutePath()));
-                    ie.mp.start();
-                    ie.recently.add(0,ie.currentpos);
-                }
-                else{
-                    ie.currentpos=0;
-                    ie.mp.stop();
-                    ie.mp.release();
-                    ie.mp=MediaPlayer.create(getApplicationContext(),Uri.parse(ie.mysongs.get(ie.currentpos).getAbsolutePath()));
-                    ie.mp.start();
-                    ie.recently.add(0,ie.currentpos);
-                }
-                update();
+               getnextsong();
             }
         });
 
@@ -297,40 +273,40 @@ public class musicplayer extends AppCompatActivity implements musicController.Me
 
     @Override
     public int getBufferPercentage() {
-        int percentage = (ie.mp.getCurrentPosition() * 100) / ie.mp.getDuration();
+        int percentage = (importantElements.mp.getCurrentPosition() * 100) / importantElements.mp.getDuration();
 
         return percentage;
     }
 
     @Override
     public int getCurrentPosition() {
-        return ie.mp.getCurrentPosition();
+        return importantElements.mp.getCurrentPosition();
     }
 
     @Override
     public int getDuration() {
-        return ie.mp.getDuration();
+        return importantElements.mp.getDuration();
     }
 
     @Override
     public boolean isPlaying() {
-        return ie.mp.isPlaying();
+        return importantElements.mp.isPlaying();
     }
 
     @Override
     public void pause() {
-        if(ie.mp.isPlaying())
-            ie.mp.pause();
+        if(importantElements.mp.isPlaying())
+            importantElements.mp.pause();
     }
 
     @Override
     public void seekTo(int pos) {
-        ie.mp.seekTo(pos);
+        importantElements.mp.seekTo(pos);
     }
 
     @Override
     public void start() {
-        ie.mp.start();
+        importantElements.mp.start();
     }
 
 

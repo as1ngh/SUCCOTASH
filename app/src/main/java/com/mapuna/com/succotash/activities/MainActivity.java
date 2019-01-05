@@ -16,20 +16,18 @@ import com.karumi.dexter.listener.single.PermissionListener;
 import com.mapuna.com.succotash.MyService;
 import com.mapuna.com.succotash.R;
 
-import java.io.File;
 
 public class MainActivity extends AppCompatActivity {
 
 
     RelativeLayout rt;
-    File file=null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        rt=(RelativeLayout)findViewById(R.id.homelay);
+        rt= findViewById(R.id.homelay);
 
         permission();
 
@@ -50,21 +48,16 @@ public class MainActivity extends AppCompatActivity {
                     }
                 }, 1000);
             }
+
             @Override
             public void onPermissionDenied(PermissionDeniedResponse response) {
             }
+
             @Override
             public void onPermissionRationaleShouldBeShown(PermissionRequest permission, PermissionToken token) {
                 token.continuePermissionRequest();
             }
         }).check();
     }
-
-    @Override
-    public void onBackPressed() {
-        super.onBackPressed();
-        startService(new Intent(this,MyService.class));
-    }
-
 
 }

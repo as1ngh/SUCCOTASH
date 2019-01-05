@@ -12,14 +12,13 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.mapuna.com.succotash.R;
-import com.mapuna.com.succotash.importantelements;
+import com.mapuna.com.succotash.importantElements;
 import com.mapuna.com.succotash.adapters.recentrecyclerviewadapter;
 
 public class fragmentalbum extends Fragment {
     View view;
     RecyclerView musicnames;
     public recentrecyclerviewadapter adapter;
-    importantelements ie;
     gotinput2 got;
 
     public fragmentalbum() {
@@ -30,11 +29,11 @@ public class fragmentalbum extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         view=inflater.inflate(R.layout.album_fragment,container,false);
 
-        musicnames= (RecyclerView) view.findViewById(R.id.recent);
+        musicnames= view.findViewById(R.id.recent);
 
-        adapter=new recentrecyclerviewadapter(getActivity(), ie.recently, new recentrecyclerviewadapter.onclick() {
+        adapter=new recentrecyclerviewadapter(getActivity(), importantElements.recently, new recentrecyclerviewadapter.onclick() {
             @Override
-            public void onclick(int pos) {
+            public void onClick(int pos) {
                 got.getupdate(pos);
 
             }
@@ -64,7 +63,7 @@ public class fragmentalbum extends Fragment {
     }
 
     public interface gotinput2{
-        public void getupdate(int i);
+        void getupdate(int i);
     }
 
 

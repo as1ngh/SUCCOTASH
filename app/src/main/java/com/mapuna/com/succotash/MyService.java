@@ -27,10 +27,8 @@ public class MyService extends Service {
 
     public static final String CHANNEL_1_ID = "channel1";
 
-    private MediaSessionCompat mediaSession;
 
     NotificationCompat.Builder builder;
-    importantelements ie=new importantelements();
 
 
     @Nullable
@@ -43,33 +41,34 @@ public class MyService extends Service {
     public int onStartCommand(Intent intent, int flags, int startId) {
 
 
-        ie.mp.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+        importantElements.mp.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
             @Override
             public void onCompletion(MediaPlayer mp) {
-                if(ie.currentpos!=ie.mysongs.size()-1){
-                    ie.currentpos=ie.currentpos+1;
-                    ie.mp.stop();
-                    ie.mp.release();
-                    ie.mp=MediaPlayer.create(getApplicationContext(),Uri.parse(ie.mysongs.get(ie.currentpos).getAbsolutePath()));
-                    ie.mp.start();
+                if(importantElements.currentpos != importantElements.mysongs.size()-1){
+                    importantElements.currentpos = importantElements.currentpos +1;
+                    importantElements.mp.stop();
+                    importantElements.mp.release();
+                    importantElements.mp =MediaPlayer.create(getApplicationContext(),Uri.parse(importantElements.mysongs.get(importantElements.currentpos).getAbsolutePath()));
+                    importantElements.mp.start();
                 }
                 else{
-                    ie.currentpos=0;
-                    ie.mp.stop();
-                    ie.mp.release();
-                    ie.mp=MediaPlayer.create(getApplicationContext(),Uri.parse(ie.mysongs.get(ie.currentpos).getAbsolutePath()));
-                    ie.mp.start();
+                    importantElements.currentpos =0;
+                    importantElements.mp.stop();
+                    importantElements.mp.release();
+                    importantElements.mp =MediaPlayer.create(getApplicationContext(),Uri.parse(importantElements.mysongs.get(importantElements.currentpos).getAbsolutePath()));
+                    importantElements.mp.start();
                 }
             }
         });
 
         metadataRetriever =new MediaMetadataRetriever();
-        metadataRetriever.setDataSource(ie.mysongs.get(ie.currentpos).getAbsolutePath());
+        metadataRetriever.setDataSource(importantElements.mysongs.get(importantElements.currentpos).getAbsolutePath());
 
-        if(ie.mp!=null)
+        if(importantElements.mp !=null)
        {
+           MediaSessionCompat mediaSession;
            mediaSession = new MediaSessionCompat(this, "tag");
-           ie.notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+           importantElements.notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
            builder=new NotificationCompat.Builder(this,CHANNEL_1_ID);
 
            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -120,16 +119,16 @@ public class MyService extends Service {
                    5, broadcastIntent4, PendingIntent.FLAG_UPDATE_CURRENT);
 
 
-            ie.notification = new NotificationCompat.Builder(this, CHANNEL_1_ID)
+            importantElements.notification = new NotificationCompat.Builder(this, CHANNEL_1_ID)
                    .setSmallIcon(R.drawable.headphones)
-                   .setContentTitle(ie.mysongs.get(ie.currentpos).getName().replace(".mp3",""))
+                   .setContentTitle(importantElements.mysongs.get(importantElements.currentpos).getName().replace(".mp3",""))
                    .setContentText("MESSAGE")
                    .setLargeIcon(artwork)
                     .setAutoCancel(true)
                    .setContentIntent(contentIntent)
                    .addAction(R.drawable.previous, "Previous", previous)
                    .addAction(R.drawable.rewind, "rewind", rewind)
-                   .addAction(ie.mp.isPlaying()?R.drawable.pause:R.drawable.play, "Pause", playpause)
+                   .addAction(importantElements.mp.isPlaying()?R.drawable.pause:R.drawable.play, "Pause", playpause)
                    .addAction(R.drawable.forward, "forward", forward)
                    .addAction(R.drawable.next, "Next", next)
                    .setStyle(new android.support.v4.media.app.NotificationCompat.MediaStyle()
@@ -139,7 +138,7 @@ public class MyService extends Service {
                    .setPriority(NotificationCompat.PRIORITY_LOW)
                    ;
 
-           ie.notificationManager.notify(2, ie.notification.build());
+           importantElements.notificationManager.notify(2, importantElements.notification.build());
        }
         return START_STICKY;
     }
@@ -156,6 +155,6 @@ public class MyService extends Service {
     public void onTaskRemoved(Intent rootIntent) {
 //Toast.makeText(this, “service called: “, Toast.LENGTH_LONG).show();
         super.onTaskRemoved(rootIntent);
-        ie.notificationManager.cancelAll();
+        importantElements.notificationManager.cancelAll();
     }
 }

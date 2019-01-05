@@ -16,17 +16,16 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.mapuna.com.succotash.R;
-import com.mapuna.com.succotash.importantelements;
+import com.mapuna.com.succotash.importantElements;
 
 import java.io.File;
 import java.util.ArrayList;
 
 public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.ViewHolder>{
-    Context mctx;
-    ArrayList<File>musicfiles;
-    importantelements ie=new importantelements();
-    MediaMetadataRetriever metadataRetriever;
-    CustomItemClickListener listener;
+    private Context mctx;
+    private ArrayList<File>musicfiles;
+
+    private CustomItemClickListener listener;
 
 
     public RecyclerViewAdapter(Context mctx,ArrayList<File>musicfiles,CustomItemClickListener listener) {
@@ -39,12 +38,12 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
         View view=LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.mycustomlist,viewGroup,false);
-        ViewHolder holder=new ViewHolder(view);
-        return holder;
+        return new ViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(@NonNull final ViewHolder viewHolder, final int i) {
+        MediaMetadataRetriever metadataRetriever;
         metadataRetriever =new MediaMetadataRetriever();
         metadataRetriever.setDataSource(musicfiles.get(i).getAbsolutePath());
 
@@ -70,7 +69,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         viewHolder.musicname.setTypeface(musicfont);
         Log.d("onBindcalled", "onBindViewHolder: ok ");
 
-        if(ie.currentpos==i){
+        if(importantElements.currentpos ==i){
             viewHolder.rt.setBackgroundColor(mctx.getResources().getColor(R.color.colorPrimary));
             viewHolder.musicname.setTextColor(mctx.getResources().getColor(R.color.white));
         }
@@ -83,7 +82,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
             public void onClick(View v) {
                 //ie.recently.add(i);
                 listener.onItemClick(i);
-                ie.currentpos=i;
+                importantElements.currentpos =i;
                 notifyDataSetChanged();
             }
         });
@@ -104,16 +103,16 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
-            musicname=(TextView)itemView.findViewById(R.id.songname_id);
-            rt=(RelativeLayout)itemView.findViewById(R.id.list_btn);
-            artistname=(TextView)itemView.findViewById(R.id.artistname);
-            art=(ImageView)itemView.findViewById(R.id.art);
+            musicname= itemView.findViewById(R.id.songname_id);
+            rt= itemView.findViewById(R.id.list_btn);
+            artistname= itemView.findViewById(R.id.artistname);
+            art= itemView.findViewById(R.id.art);
         }
     }
 
 
     public interface CustomItemClickListener {
-        public void onItemClick(int position);
+        void onItemClick(int position);
     }
 
 
