@@ -5,6 +5,7 @@ import android.app.PendingIntent;
 import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -30,22 +31,22 @@ import android.widget.Toast;
 
 import com.mapuna.com.succotash.MyService;
 import com.mapuna.com.succotash.R;
-import com.mapuna.com.succotash.SleepTimerReceiver;
+import com.mapuna.com.succotash.receiver.SleepTimerReceiver;
 import com.mapuna.com.succotash.adapters.ViewPageAdapter;
 import com.mapuna.com.succotash.fragments.TimePickerFragment;
-import com.mapuna.com.succotash.fragments.fragmentalbum;
-import com.mapuna.com.succotash.fragments.fragmentartist;
+import com.mapuna.com.succotash.fragments.fragmentrecent;
+import com.mapuna.com.succotash.fragments.fragmentplaylist;
 import com.mapuna.com.succotash.fragments.fragmentmusiclist;
 import com.mapuna.com.succotash.importantElements;
 
 import java.text.DateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.LinkedHashSet;
-import java.util.List;
 import java.util.Random;
 import java.util.Set;
 
-public class musiclist_activity extends AppCompatActivity implements fragmentmusiclist.gotinput , fragmentalbum.gotinput2,TimePickerDialog.OnTimeSetListener{
+public class musiclist_activity extends AppCompatActivity implements fragmentmusiclist.gotinput,fragmentrecent.gotinput2,fragmentplaylist.gotinput3,TimePickerDialog.OnTimeSetListener{
 
 
     TabLayout tabLayout;
@@ -55,7 +56,8 @@ public class musiclist_activity extends AppCompatActivity implements fragmentmus
     Button play_pause;
     Button timer;
     fragmentmusiclist fragMusicList;
-    fragmentalbum fragAlbum;
+    fragmentrecent fragAlbum;
+    fragmentplaylist fragPlaylist;
     ImageView art;
     RelativeLayout music;
     MediaMetadataRetriever metadataRetriever;
@@ -67,9 +69,12 @@ public class musiclist_activity extends AppCompatActivity implements fragmentmus
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_musiclist_activity);
 
+        loadDate();
 
         stopService(new Intent(this,MyService.class));
-
+        if(importantElements.mp!=null){
+            importantElements.notificationManager.cancelAll();
+        }
 
         tabLayout= findViewById(R.id.tablayout_id);
         appBarLayout=findViewById(R.id.appbarid);
@@ -85,19 +90,22 @@ public class musiclist_activity extends AppCompatActivity implements fragmentmus
         Typeface musicfont=Typeface.createFromAsset(getAssets(),"fonts/Raleway-Light.ttf");
         musicName.setTypeface(musicfont);
 
+        //Set viewPager adapter with fragments
         fragMusicList =new fragmentmusiclist();
-        fragAlbum =new fragmentalbum();
+        fragAlbum =new fragmentrecent();
+        fragPlaylist=new fragmentplaylist();
         ViewPageAdapter adapter=new ViewPageAdapter(getSupportFragmentManager());
         adapter.AddFragment(fragMusicList,"music list");
         adapter.AddFragment(fragAlbum,"recently played");
-        adapter.AddFragment(new fragmentartist()," Playlist");
+        adapter.AddFragment(fragPlaylist," Playlist");
 
         viewPager.setAdapter(adapter);
         tabLayout.setupWithViewPager(viewPager);
 
-        /* if(ie.mp!=null) {
-            musicName.setText(ie.mysongs.get(ie.currentpos).getName().replace(".mp3", ""));
-            if(ie.mp.isPlaying()) {
+        //To place music data on activity on first run if mediaplayer is not null
+         if(importantElements.mp!=null) {
+            musicName.setText(importantElements.mysongs.get(importantElements.currentpos).getName().replace(".mp3", ""));
+            if(importantElements.mp.isPlaying()) {
                 final Drawable myDrawable;
                 Resources res = getResources();
                 try {
@@ -118,29 +126,16 @@ public class musiclist_activity extends AppCompatActivity implements fragmentmus
                 }
             }
 
-            ie.mp.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+            importantElements.mp.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
                 @Override
                 public void onCompletion(MediaPlayer mp) {
-                    if(ie.currentpos!=ie.mysongs.size()-1){
-                        ie.currentpos=ie.currentpos+1;
-                        ie.mp.stop();
-                        ie.mp.release();
-                        ie.mp=MediaPlayer.create(getApplicationContext(),Uri.parse(ie.mysongs.get(ie.currentpos).getAbsolutePath()));
-                        ie.mp.start();
-                    }
-                    else{
-                        ie.currentpos=0;
-                        ie.mp.stop();
-                        ie.mp.release();
-                        ie.mp=MediaPlayer.create(getApplicationContext(),Uri.parse(ie.mysongs.get(ie.currentpos).getAbsolutePath()));
-                        ie.mp.start();
-                    }
-                    update(ie.currentpos);
+                   getnextsong();
                 }
             });
 
-        } */
+        }
 
+        //PLAY/PAUSE BUTTON
         play_pause.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -176,6 +171,7 @@ public class musiclist_activity extends AppCompatActivity implements fragmentmus
         });
 
 
+         //CLICK TO START MUSIC PLAYER ACTIVITY
         music.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -196,6 +192,8 @@ public class musiclist_activity extends AppCompatActivity implements fragmentmus
 
     }
 
+
+    //Function for getting next song with some conditions like shuffle and looping
     public void getnextsong(){
         if(importantElements.looping ==1){
             importantElements.mp.stop();
@@ -237,6 +235,7 @@ public class musiclist_activity extends AppCompatActivity implements fragmentmus
     }
 
 
+    //To update the activity according to current music playing
     void update(int i){
         metadataRetriever =new MediaMetadataRetriever();
         metadataRetriever.setDataSource(importantElements.mysongs.get(i).getAbsolutePath());
@@ -288,7 +287,8 @@ public class musiclist_activity extends AppCompatActivity implements fragmentmus
         });
     }
 
-    public static <T> List<T> removeDuplicates(List<T> list)
+    //To update Recently listened list of song so that no one is repeated
+    public static <T> ArrayList<T> removeDuplicates(ArrayList<T> list)
     {
         // Create a new LinkedHashSet
         Set<T> set = new LinkedHashSet<>();
@@ -309,6 +309,7 @@ public class musiclist_activity extends AppCompatActivity implements fragmentmus
 
 
 
+    //To get update from various fragments
     @Override
     public void getupdate(int i) {
         music.setVisibility(View.VISIBLE);
@@ -319,13 +320,17 @@ public class musiclist_activity extends AppCompatActivity implements fragmentmus
         //Toast.makeText(getApplicationContext(), "No Music Selected"+i, Toast.LENGTH_LONG).show();
     }
 
+    //To set action when recyclerView scrolled up
     @Override
     public void scrollup() {
+        if(importantElements.mp!=null)
         music.setVisibility(View.VISIBLE);
     }
 
+    //To set action when recyclerView scrolled down
     @Override
     public void scrolldown() {
+        if(importantElements.mp!=null)
         music.setVisibility(View.INVISIBLE);
 
     }
@@ -334,6 +339,9 @@ public class musiclist_activity extends AppCompatActivity implements fragmentmus
     @Override
     protected void onRestart() {
         super.onRestart();
+        if(importantElements.mp!=null){
+            importantElements.notificationManager.cancelAll();
+        }
         importantElements.recently =removeDuplicates(importantElements.recently);
         fragAlbum.adapter.notifyDataSetChanged();
 
@@ -385,10 +393,21 @@ public class musiclist_activity extends AppCompatActivity implements fragmentmus
     @Override
     public void onBackPressed() {
         super.onBackPressed();
+        savedata(importantElements.playlist);
+        //saverecent(importantElements.recently);
         startService(new Intent(this,MyService.class));
     }
 
+    @Override
+    protected void onStop() {
+        savedata(importantElements.playlist);
+        //saverecent(importantElements.recently);
+        startService(new Intent(this,MyService.class));
+        super.onStop();
+    }
 
+
+    //called when time is set
     @Override
     public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
         Calendar c=Calendar.getInstance();
@@ -399,6 +418,65 @@ public class musiclist_activity extends AppCompatActivity implements fragmentmus
         setTimer(c);
     }
 
+
+    //To save the updated playlist from this activity
+    public void savedata(ArrayList<ArrayList<Integer>> playlist){
+        String aString;
+        aString = "";
+        int column;
+        int row;
+
+        for (row = 0; row < playlist.size(); row++) {
+            for (column = 0; column < playlist.get(row).size(); column++ ) {
+                if(column==playlist.get(row).size()-1){
+                    aString = aString + playlist.get(row).get(column) ;
+                }
+                else{
+                    aString = aString + playlist.get(row).get(column) + ",";
+                }
+            }
+            if(row==playlist.size()-1){
+                aString = aString + "";
+            }
+            else {
+                aString = aString + ";";
+            }
+        }
+
+        SharedPreferences pref = getApplicationContext().getSharedPreferences("MyPref", 0); // 0 - for private mode
+        SharedPreferences.Editor editor = pref.edit();
+        editor.putString("key_name", aString); // Storing string
+        editor.commit();
+    }
+
+    //To load playlist from shared preference
+    public void loadDate(){
+        SharedPreferences pref = getApplicationContext().getSharedPreferences("MyPref", 0); // 0 - for private mode
+        String found=pref.getString("key_name", null); // getting String
+       if(found==null ||found==""){
+
+       }
+       else{
+           importantElements.playlist=new ArrayList<>();
+           String row[]=found.split(";");
+           int width=row.length;
+           for(int i=0;i<width;i++){
+               ArrayList<Integer>oneplay=new ArrayList<>();
+               String cells[]=row[i].split(",");
+               int hieght=cells.length;
+               for(int j=0;j<hieght;j++){
+                   int test =Integer.valueOf(cells[j]);
+                   oneplay.add(test);
+
+               }
+               importantElements.playlist.add(oneplay);
+           }
+       }
+    }
+
+
+
+    //To set time to close the app after few interval
     private void startalarm(Calendar c){
         AlarmManager alarmManager=(AlarmManager)getSystemService(Context.ALARM_SERVICE);
         Intent intent=new Intent(this,SleepTimerReceiver.class);

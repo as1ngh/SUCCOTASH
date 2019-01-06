@@ -1,4 +1,4 @@
-package com.mapuna.com.succotash;
+package com.mapuna.com.succotash.receiver;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -8,6 +8,11 @@ import android.graphics.BitmapFactory;
 import android.media.MediaMetadataRetriever;
 import android.media.MediaPlayer;
 import android.net.Uri;
+
+import com.mapuna.com.succotash.R;
+import com.mapuna.com.succotash.importantElements;
+
+//RECEIVER FOR ACTIONS ON NOTIFICATION
 
 public class NotificationReciever extends BroadcastReceiver {
     MediaMetadataRetriever metadataRetriever;

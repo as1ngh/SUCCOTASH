@@ -27,7 +27,7 @@ import java.lang.ref.WeakReference;
 import java.util.Formatter;
 import java.util.Locale;
 
-
+//CUSTOM MEDIACONTROLLER CLASS FOR GOOD UI
 
 /**
  * A view containing controls for a MediaPlayer. Typically contains the

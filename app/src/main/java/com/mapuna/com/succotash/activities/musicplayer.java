@@ -1,6 +1,7 @@
 package com.mapuna.com.succotash.activities;
 
 
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.media.MediaMetadataRetriever;
@@ -21,6 +22,7 @@ import com.mapuna.com.succotash.R;
 import com.mapuna.com.succotash.importantElements;
 import com.mapuna.com.succotash.musicController;
 
+import java.util.ArrayList;
 import java.util.Random;
 
 
@@ -156,6 +158,7 @@ public class musicplayer extends AppCompatActivity implements musicController.Me
     }
 
 
+    //TO GET NEXT SONG ACCORDING TO SOME PARAMETERS
     public void getnextsong(){
         if(importantElements.looping ==1){
             importantElements.mp.stop();
@@ -196,6 +199,7 @@ public class musicplayer extends AppCompatActivity implements musicController.Me
         update();
     }
 
+    //UPDATE SHUFFLE AND LOOPING BUTTONS
     public void setsmallicon(){
         if(importantElements.shuffle ==1 && importantElements.looping ==0){
             shuffle.setBackground(getResources().getDrawable(R.drawable.ic_shuffle_black_24dp));
@@ -214,6 +218,7 @@ public class musicplayer extends AppCompatActivity implements musicController.Me
     }
 
 
+    //UPDATE THE WHOLE ACTIVITY
     public void update(){
         metadataRetriever.setDataSource(importantElements.mysongs.get(importantElements.currentpos).getAbsolutePath());
         if(metadataRetriever.getEmbeddedPicture()!=null){
@@ -317,6 +322,44 @@ public class musicplayer extends AppCompatActivity implements musicController.Me
         mMediaController.show();
 
         return false;
+    }
+
+    //SAVES PLAYLIST IF APP CLOSED FROM HERE
+    public void savedata(ArrayList<ArrayList<Integer>> playlist){
+        String aString;
+        aString = "";
+        int column;
+        int row;
+
+        for (row = 0; row < playlist.size(); row++) {
+            for (column = 0; column < playlist.get(row).size(); column++ ) {
+                if(column==playlist.get(row).size()-1){
+                    aString = aString + playlist.get(row).get(column) ;
+                }
+                else{
+                    aString = aString + playlist.get(row).get(column) + ",";
+                }
+            }
+            if(row==playlist.size()-1){
+                aString = aString + "";
+            }
+            else {
+                aString = aString + ";";
+            }
+        }
+
+        SharedPreferences pref = getApplicationContext().getSharedPreferences("MyPref", 0); // 0 - for private mode
+        SharedPreferences.Editor editor = pref.edit();
+        editor.putString("key_name", aString); // Storing string
+        editor.commit();
+    }
+
+    @Override
+    protected void onStop() {
+        savedata(importantElements.playlist);
+        //saverecent(importantElements.recently);
+        //startService(new Intent(this,MyService.class));
+        super.onStop();
     }
 
 

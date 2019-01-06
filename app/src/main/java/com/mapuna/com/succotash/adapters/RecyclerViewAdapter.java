@@ -24,7 +24,6 @@ import java.util.ArrayList;
 public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.ViewHolder>{
     private Context mctx;
     private ArrayList<File>musicfiles;
-
     private CustomItemClickListener listener;
 
 
@@ -41,6 +40,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         return new ViewHolder(view);
     }
 
+    //GIVES PROPERTIES LIKE MEDIA ART AND ARTIST NAME
     @Override
     public void onBindViewHolder(@NonNull final ViewHolder viewHolder, final int i) {
         MediaMetadataRetriever metadataRetriever;
