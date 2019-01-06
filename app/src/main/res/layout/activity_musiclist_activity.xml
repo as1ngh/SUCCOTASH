@@ -10,13 +10,17 @@
 
     <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"
-        android:layout_height="80dp"
-        android:layout_gravity="center"
-        android:gravity="fill_horizontal"
+        android:layout_height="70dp"
         android:elevation="0dp"
         android:id="@+id/appbarid">
 
-
+        <Button
+            android:id="@+id/setTimer"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_gravity="right"
+            android:layout_margin="15dp"
+            android:background="@drawable/alarm" />
 
     </android.support.design.widget.AppBarLayout>
 

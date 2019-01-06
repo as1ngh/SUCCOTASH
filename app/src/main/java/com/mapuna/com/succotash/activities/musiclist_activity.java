@@ -1,5 +1,9 @@
 package com.mapuna.com.succotash.activities;
 
+import android.app.AlarmManager;
+import android.app.PendingIntent;
+import android.app.TimePickerDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
@@ -11,6 +15,7 @@ import android.media.MediaPlayer;
 import android.net.Uri;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.TabLayout;
+import android.support.v4.app.DialogFragment;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -20,22 +25,26 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.TimePicker;
 import android.widget.Toast;
 
 import com.mapuna.com.succotash.MyService;
 import com.mapuna.com.succotash.R;
+import com.mapuna.com.succotash.SleepTimerReceiver;
 import com.mapuna.com.succotash.adapters.ViewPageAdapter;
+import com.mapuna.com.succotash.fragments.TimePickerFragment;
 import com.mapuna.com.succotash.fragments.fragmentalbum;
 import com.mapuna.com.succotash.fragments.fragmentartist;
 import com.mapuna.com.succotash.fragments.fragmentmusiclist;
 import com.mapuna.com.succotash.importantElements;
 
+import java.util.Calendar;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Random;
 import java.util.Set;
 
-public class musiclist_activity extends AppCompatActivity implements fragmentmusiclist.gotinput , fragmentalbum.gotinput2{
+public class musiclist_activity extends AppCompatActivity implements fragmentmusiclist.gotinput , fragmentalbum.gotinput2,TimePickerDialog.OnTimeSetListener{
 
 
     TabLayout tabLayout;
@@ -43,6 +52,7 @@ public class musiclist_activity extends AppCompatActivity implements fragmentmus
     ViewPager viewPager;
     TextView musicName;
     Button play_pause;
+    Button timer;
     fragmentmusiclist fragMusicList;
     fragmentalbum fragAlbum;
     ImageView art;
@@ -66,9 +76,9 @@ public class musiclist_activity extends AppCompatActivity implements fragmentmus
         play_pause=findViewById(R.id.play_pause_id);
         music=findViewById(R.id.upplayer);
         art=findViewById(R.id.listart);
+        timer=findViewById(R.id.setTimer);
 
         music.setVisibility(View.INVISIBLE);
-
         Typeface musicfont=Typeface.createFromAsset(getAssets(),"fonts/Raleway-Light.ttf");
         musicName.setTypeface(musicfont);
 
@@ -170,6 +180,14 @@ public class musiclist_activity extends AppCompatActivity implements fragmentmus
                     Toast.makeText(getApplicationContext(), "No Music Selected", Toast.LENGTH_LONG).show();
                 else
                      startActivity(new Intent(getApplicationContext(),musicplayer.class));
+            }
+        });
+
+        timer.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                DialogFragment timepicker=new TimePickerFragment();
+                timepicker.show(getSupportFragmentManager(),"time picker");
             }
         });
 
@@ -368,7 +386,19 @@ public class musiclist_activity extends AppCompatActivity implements fragmentmus
     }
 
 
+    @Override
+    public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+        Calendar c=Calendar.getInstance();
+        c.set(Calendar.HOUR_OF_DAY,hourOfDay);
+        c.set(Calendar.MINUTE,minute);
+        c.set(Calendar.SECOND,0);
+        startalarm(c);
+    }
 
-
-
+    private void startalarm(Calendar c){
+        AlarmManager alarmManager=(AlarmManager)getSystemService(Context.ALARM_SERVICE);
+        Intent intent=new Intent(this,SleepTimerReceiver.class);
+        PendingIntent pendingIntent=PendingIntent.getBroadcast(this,7,intent,0);
+        alarmManager.setExact(AlarmManager.RTC_WAKEUP,c.getTimeInMillis(),pendingIntent);
+    }
 }

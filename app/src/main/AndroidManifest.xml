@@ -11,7 +11,8 @@
         android:roundIcon="@drawable/headphones"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".activities.MainActivity"
+        <activity
+            android:name=".activities.MainActivity"
             android:launchMode="singleTask">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -20,10 +21,13 @@
             </intent-filter>
         </activity>
         <activity android:name=".activities.musiclist_activity" />
-        <activity android:name=".activities.musicplayer"></activity>
+        <activity android:name=".activities.musicplayer" />
 
-        <service android:name=".MyService"></service>
+        <service android:name=".MyService" />
+        <receiver android:name=".SleepTimerReceiver" />
         <receiver android:name=".NotificationReciever" />
+
+
     </application>
 
 </manifest>
