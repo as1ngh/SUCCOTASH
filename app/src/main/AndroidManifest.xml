@@ -22,6 +22,10 @@
         </activity>
         <activity android:name=".activities.musiclist_activity" />
         <activity android:name=".activities.musicplayer" />
+        <activity
+            android:name=".activities.ExitActivity"
+            android:theme="@android:style/Theme.NoDisplay"
+            android:autoRemoveFromRecents="true"/>
 
         <service android:name=".MyService" />
         <receiver android:name=".SleepTimerReceiver" />

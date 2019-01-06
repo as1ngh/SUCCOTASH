@@ -5,12 +5,13 @@ import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
 
+import com.mapuna.com.succotash.activities.ExitActivity;
+
 public class SleepTimerReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
         if(importantElements.mp.isPlaying()) importantElements.mp.stop();
         Log.d("ALARM", "onReceive: alarm");
-        android.os.Process.killProcess(android.os.Process.myPid());
-        System.exit(1);
+        ExitActivity.exitApplication(context);
     }
 }

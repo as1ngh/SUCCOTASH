@@ -38,6 +38,7 @@ import com.mapuna.com.succotash.fragments.fragmentartist;
 import com.mapuna.com.succotash.fragments.fragmentmusiclist;
 import com.mapuna.com.succotash.importantElements;
 
+import java.text.DateFormat;
 import java.util.Calendar;
 import java.util.LinkedHashSet;
 import java.util.List;
@@ -58,6 +59,7 @@ public class musiclist_activity extends AppCompatActivity implements fragmentmus
     ImageView art;
     RelativeLayout music;
     MediaMetadataRetriever metadataRetriever;
+    TextView time;
 
 
     @Override
@@ -77,6 +79,7 @@ public class musiclist_activity extends AppCompatActivity implements fragmentmus
         music=findViewById(R.id.upplayer);
         art=findViewById(R.id.listart);
         timer=findViewById(R.id.setTimer);
+        time=findViewById(R.id.time);
 
         music.setVisibility(View.INVISIBLE);
         Typeface musicfont=Typeface.createFromAsset(getAssets(),"fonts/Raleway-Light.ttf");
@@ -87,7 +90,7 @@ public class musiclist_activity extends AppCompatActivity implements fragmentmus
         ViewPageAdapter adapter=new ViewPageAdapter(getSupportFragmentManager());
         adapter.AddFragment(fragMusicList,"music list");
         adapter.AddFragment(fragAlbum,"recently played");
-        adapter.AddFragment(new fragmentartist(),"artist list");
+        adapter.AddFragment(new fragmentartist()," Playlist");
 
         viewPager.setAdapter(adapter);
         tabLayout.setupWithViewPager(viewPager);
@@ -393,6 +396,7 @@ public class musiclist_activity extends AppCompatActivity implements fragmentmus
         c.set(Calendar.MINUTE,minute);
         c.set(Calendar.SECOND,0);
         startalarm(c);
+        setTimer(c);
     }
 
     private void startalarm(Calendar c){
@@ -400,5 +404,13 @@ public class musiclist_activity extends AppCompatActivity implements fragmentmus
         Intent intent=new Intent(this,SleepTimerReceiver.class);
         PendingIntent pendingIntent=PendingIntent.getBroadcast(this,7,intent,0);
         alarmManager.setExact(AlarmManager.RTC_WAKEUP,c.getTimeInMillis(),pendingIntent);
+    }
+
+    private void setTimer(Calendar c){
+        time.setVisibility(View.VISIBLE);
+        String timestr="";
+        timestr+=DateFormat.getTimeInstance(DateFormat.SHORT).format(c.getTime());
+        time.setText(timestr);
+
     }
 }
