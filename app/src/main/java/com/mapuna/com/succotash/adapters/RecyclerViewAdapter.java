@@ -24,7 +24,6 @@ import java.util.ArrayList;
 public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.ViewHolder>{
     private Context mctx;
     private ArrayList<File>musicfiles;
-
     private CustomItemClickListener listener;
 
 

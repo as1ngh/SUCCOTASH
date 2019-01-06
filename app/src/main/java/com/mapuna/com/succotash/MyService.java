@@ -17,6 +17,7 @@ import android.support.v4.app.NotificationCompat;
 import android.support.v4.media.session.MediaSessionCompat;
 import android.util.Log;
 
+import com.mapuna.com.succotash.activities.musiclist_activity;
 import com.mapuna.com.succotash.activities.musicplayer;
 
 
@@ -58,6 +59,18 @@ public class MyService extends Service {
                     importantElements.mp =MediaPlayer.create(getApplicationContext(),Uri.parse(importantElements.mysongs.get(importantElements.currentpos).getAbsolutePath()));
                     importantElements.mp.start();
                 }
+                metadataRetriever =new MediaMetadataRetriever();
+                metadataRetriever.setDataSource(importantElements.mysongs.get(importantElements.currentpos).getAbsolutePath());
+
+                Bitmap artwork = BitmapFactory.decodeResource(getResources(), R.drawable.headphones);
+                if(metadataRetriever.getEmbeddedPicture()!=null){
+                    artwork = BitmapFactory
+                            .decodeByteArray(metadataRetriever.getEmbeddedPicture(), 0, metadataRetriever.getEmbeddedPicture().length);
+
+                }
+                importantElements.notification.setContentTitle(importantElements.mysongs.get(importantElements.currentpos).getName().replace(".mp3",""))
+                        .setLargeIcon(artwork);
+                importantElements.notificationManager.notify(2, importantElements.notification.build());
             }
         });
 
@@ -89,7 +102,7 @@ public class MyService extends Service {
 
            }
 
-           Intent activityIntent = new Intent(this, musicplayer.class);
+           Intent activityIntent = new Intent(this, musiclist_activity.class);
            PendingIntent contentIntent = PendingIntent.getActivity(this,
                    6, activityIntent,PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_ONE_SHOT);
 

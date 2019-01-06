@@ -20,5 +20,6 @@ public class importantElements {
     public static List<Integer> recently =new ArrayList<>();
     public static int shuffle=0;
     public static int looping=0;
+    public static ArrayList<List<Integer>>playlist=new ArrayList<>();
 
 }

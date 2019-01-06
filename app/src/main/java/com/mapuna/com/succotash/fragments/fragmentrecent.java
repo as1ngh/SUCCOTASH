@@ -15,13 +15,13 @@ import com.mapuna.com.succotash.R;
 import com.mapuna.com.succotash.importantElements;
 import com.mapuna.com.succotash.adapters.recentrecyclerviewadapter;
 
-public class fragmentalbum extends Fragment {
+public class fragmentrecent extends Fragment {
     View view;
     RecyclerView musicnames;
     public recentrecyclerviewadapter adapter;
     gotinput2 got;
 
-    public fragmentalbum() {
+    public fragmentrecent() {
     }
 
     @Nullable

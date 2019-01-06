@@ -33,8 +33,8 @@ import com.mapuna.com.succotash.R;
 import com.mapuna.com.succotash.SleepTimerReceiver;
 import com.mapuna.com.succotash.adapters.ViewPageAdapter;
 import com.mapuna.com.succotash.fragments.TimePickerFragment;
-import com.mapuna.com.succotash.fragments.fragmentalbum;
-import com.mapuna.com.succotash.fragments.fragmentartist;
+import com.mapuna.com.succotash.fragments.fragmentrecent;
+import com.mapuna.com.succotash.fragments.fragmentplaylist;
 import com.mapuna.com.succotash.fragments.fragmentmusiclist;
 import com.mapuna.com.succotash.importantElements;
 
@@ -45,7 +45,7 @@ import java.util.List;
 import java.util.Random;
 import java.util.Set;
 
-public class musiclist_activity extends AppCompatActivity implements fragmentmusiclist.gotinput , fragmentalbum.gotinput2,TimePickerDialog.OnTimeSetListener{
+public class musiclist_activity extends AppCompatActivity implements fragmentmusiclist.gotinput,fragmentrecent.gotinput2,fragmentplaylist.gotinput3,TimePickerDialog.OnTimeSetListener{
 
 
     TabLayout tabLayout;
@@ -55,7 +55,8 @@ public class musiclist_activity extends AppCompatActivity implements fragmentmus
     Button play_pause;
     Button timer;
     fragmentmusiclist fragMusicList;
-    fragmentalbum fragAlbum;
+    fragmentrecent fragAlbum;
+    fragmentplaylist fragPlaylist;
     ImageView art;
     RelativeLayout music;
     MediaMetadataRetriever metadataRetriever;
@@ -86,11 +87,12 @@ public class musiclist_activity extends AppCompatActivity implements fragmentmus
         musicName.setTypeface(musicfont);
 
         fragMusicList =new fragmentmusiclist();
-        fragAlbum =new fragmentalbum();
+        fragAlbum =new fragmentrecent();
+        fragPlaylist=new fragmentplaylist();
         ViewPageAdapter adapter=new ViewPageAdapter(getSupportFragmentManager());
         adapter.AddFragment(fragMusicList,"music list");
         adapter.AddFragment(fragAlbum,"recently played");
-        adapter.AddFragment(new fragmentartist()," Playlist");
+        adapter.AddFragment(fragPlaylist," Playlist");
 
         viewPager.setAdapter(adapter);
         tabLayout.setupWithViewPager(viewPager);
