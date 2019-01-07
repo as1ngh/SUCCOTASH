@@ -27,7 +27,7 @@ public class fragmentplaylist extends Fragment {
     View view;
     FloatingActionButton addplay;
     RecyclerView playls;
-    playlistadapter adapter;
+    public playlistadapter adapter;
     gotinput3 got;
     public fragmentplaylist() {
     }

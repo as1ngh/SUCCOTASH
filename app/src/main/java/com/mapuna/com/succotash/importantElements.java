@@ -17,7 +17,7 @@ public class importantElements {
     //static int recyclerint;
     public static NotificationCompat.Builder notification;
     public static NotificationManager notificationManager;
-    public static List<Integer> recently =new ArrayList<>();
+    public static ArrayList<Integer> recently =new ArrayList<>();
     public static int shuffle=0;
     public static int looping=0;
     public static ArrayList<List<Integer>>playlist=new ArrayList<>();

@@ -31,6 +31,7 @@ import android.widget.TimePicker;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 import com.mapuna.com.succotash.MyService;
 import com.mapuna.com.succotash.R;
@@ -67,18 +68,17 @@ public class musiclist_activity extends AppCompatActivity implements fragmentmus
     RelativeLayout music;
     MediaMetadataRetriever metadataRetriever;
     TextView time;
+    SharedPreferences  mPrefs;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_musiclist_activity);
+        mPrefs = getPreferences(MODE_PRIVATE);
 
         //load();
-
-
         stopService(new Intent(this,MyService.class));
-
 
         tabLayout= findViewById(R.id.tablayout_id);
         appBarLayout=findViewById(R.id.appbarid);
@@ -298,7 +298,7 @@ public class musiclist_activity extends AppCompatActivity implements fragmentmus
         });
     }
 
-    public static <T> List<T> removeDuplicates(List<T> list)
+    public static <T> ArrayList<T> removeDuplicates(ArrayList<T> list)
     {
         // Create a new LinkedHashSet
         Set<T> set = new LinkedHashSet<>();
@@ -417,18 +417,23 @@ public class musiclist_activity extends AppCompatActivity implements fragmentmus
         String json=gson.toJson(importantElements.recently);
         editor.putString("recent",json);
         editor.apply();
+        Log.d("SAVEING", "load: SAVE");
+
     }
 
     private void load(){
         SharedPreferences sharedPreferences=getSharedPreferences("shared preference",MODE_PRIVATE);
-        Gson gson=new Gson();
+        Gson gson=new GsonBuilder().create();
         String json=sharedPreferences.getString("recent",null);
         Type type=new TypeToken<ArrayList<Integer>>(){}.getType();
-        importantElements.recently=gson.fromJson(json,type);
-        if(importantElements.recently==null){
+
+        if(json==null){
             importantElements.recently=new ArrayList<>();
         }
-
+        else {
+            importantElements.recently=gson.fromJson(json,type);
+            Log.d("LOADING", "load: RECENT");
+        }
 
     }
 
