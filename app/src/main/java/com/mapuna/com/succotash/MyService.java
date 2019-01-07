@@ -18,7 +18,7 @@ import android.support.v4.media.session.MediaSessionCompat;
 import android.util.Log;
 
 import com.mapuna.com.succotash.activities.musiclist_activity;
-import com.mapuna.com.succotash.activities.musicplayer;
+import com.mapuna.com.succotash.receiver.NotificationReciever;
 
 
 public class MyService extends Service {

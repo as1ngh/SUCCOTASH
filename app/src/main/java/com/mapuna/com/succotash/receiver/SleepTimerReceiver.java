@@ -1,4 +1,4 @@
-package com.mapuna.com.succotash;
+package com.mapuna.com.succotash.receiver;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.util.Log;
 
 import com.mapuna.com.succotash.activities.ExitActivity;
+import com.mapuna.com.succotash.importantElements;
 
 public class SleepTimerReceiver extends BroadcastReceiver {
     @Override

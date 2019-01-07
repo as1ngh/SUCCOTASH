@@ -28,8 +28,8 @@
             android:autoRemoveFromRecents="true"/>
 
         <service android:name=".MyService" />
-        <receiver android:name=".SleepTimerReceiver" />
-        <receiver android:name=".NotificationReciever" />
+        <receiver android:name=".receiver.SleepTimerReceiver" />
+        <receiver android:name=".receiver.NotificationReciever" />
 
 
     </application>

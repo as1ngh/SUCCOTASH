@@ -30,7 +30,7 @@ import android.widget.Toast;
 
 import com.mapuna.com.succotash.MyService;
 import com.mapuna.com.succotash.R;
-import com.mapuna.com.succotash.SleepTimerReceiver;
+import com.mapuna.com.succotash.receiver.SleepTimerReceiver;
 import com.mapuna.com.succotash.adapters.ViewPageAdapter;
 import com.mapuna.com.succotash.fragments.TimePickerFragment;
 import com.mapuna.com.succotash.fragments.fragmentrecent;

@@ -15,8 +15,8 @@ public class importantElements {
     public static ArrayList<File>mysongs;
     public static int currentpos = -1;
     //static int recyclerint;
-    static NotificationCompat.Builder notification;
-    static NotificationManager notificationManager;
+    public static NotificationCompat.Builder notification;
+    public static NotificationManager notificationManager;
     public static List<Integer> recently =new ArrayList<>();
     public static int shuffle=0;
     public static int looping=0;

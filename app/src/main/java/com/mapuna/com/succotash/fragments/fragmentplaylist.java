@@ -38,6 +38,7 @@ public class fragmentplaylist extends Fragment {
         view=inflater.inflate(R.layout.artist_fragment,container,false);
         addplay=view.findViewById(R.id.addplaylist);
         playls=view.findViewById(R.id.playlist_id);
+        playls.addOnScrollListener(new CustomScrollListener());
 
         ArrayList<String>getsongs=new ArrayList<>();
         for(int i=0;i<importantElements.mysongs.size();i++){
@@ -170,6 +171,47 @@ public class fragmentplaylist extends Fragment {
 
     public interface gotinput3{
         void getupdate(int i);
+        void scrollup();
+        void scrolldown();
+    }
+
+    public class CustomScrollListener extends RecyclerView.OnScrollListener {
+        public CustomScrollListener() {
+        }
+
+        public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
+            switch (newState) {
+                case RecyclerView.SCROLL_STATE_IDLE:
+                    System.out.println("The RecyclerView is not scrolling");
+                    break;
+                case RecyclerView.SCROLL_STATE_DRAGGING:
+                    System.out.println("Scrolling now");
+                    break;
+                case RecyclerView.SCROLL_STATE_SETTLING:
+                    System.out.println("Scroll Settling");
+                    break;
+
+            }
+
+        }
+
+        public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
+            if (dx > 0) {
+                System.out.println("Scrolled Right");
+            } else if (dx < 0) {
+                System.out.println("Scrolled Left");
+            } else {
+                System.out.println("No Horizontal Scrolled");
+            }
+
+            if (dy > 0) {
+                got.scrolldown();
+            } else if (dy < 0) {
+                got.scrollup();
+            } else {
+                System.out.println("No Vertical Scrolled");
+            }
+        }
     }
 
 }
