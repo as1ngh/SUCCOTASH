@@ -5,6 +5,7 @@ import android.app.PendingIntent;
 import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -12,6 +13,7 @@ import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.media.MediaMetadataRetriever;
 import android.media.MediaPlayer;
+import android.media.session.MediaSession;
 import android.net.Uri;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.TabLayout;
@@ -28,6 +30,8 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.mapuna.com.succotash.MyService;
 import com.mapuna.com.succotash.R;
 import com.mapuna.com.succotash.receiver.SleepTimerReceiver;
@@ -38,7 +42,9 @@ import com.mapuna.com.succotash.fragments.fragmentplaylist;
 import com.mapuna.com.succotash.fragments.fragmentmusiclist;
 import com.mapuna.com.succotash.importantElements;
 
+import java.lang.reflect.Type;
 import java.text.DateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.LinkedHashSet;
 import java.util.List;
@@ -67,6 +73,8 @@ public class musiclist_activity extends AppCompatActivity implements fragmentmus
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_musiclist_activity);
+
+        //load();
 
 
         stopService(new Intent(this,MyService.class));
@@ -387,6 +395,7 @@ public class musiclist_activity extends AppCompatActivity implements fragmentmus
     @Override
     public void onBackPressed() {
         super.onBackPressed();
+        savedata();
         startService(new Intent(this,MyService.class));
     }
 
@@ -399,6 +408,28 @@ public class musiclist_activity extends AppCompatActivity implements fragmentmus
         c.set(Calendar.SECOND,0);
         startalarm(c);
         setTimer(c);
+    }
+
+    private void savedata(){
+        SharedPreferences sharedPreferences=getSharedPreferences("shared preference",MODE_PRIVATE);
+        SharedPreferences.Editor editor=sharedPreferences.edit();
+        Gson gson=new Gson();
+        String json=gson.toJson(importantElements.recently);
+        editor.putString("recent",json);
+        editor.apply();
+    }
+
+    private void load(){
+        SharedPreferences sharedPreferences=getSharedPreferences("shared preference",MODE_PRIVATE);
+        Gson gson=new Gson();
+        String json=sharedPreferences.getString("recent",null);
+        Type type=new TypeToken<ArrayList<Integer>>(){}.getType();
+        importantElements.recently=gson.fromJson(json,type);
+        if(importantElements.recently==null){
+            importantElements.recently=new ArrayList<>();
+        }
+
+
     }
 
     private void startalarm(Calendar c){
