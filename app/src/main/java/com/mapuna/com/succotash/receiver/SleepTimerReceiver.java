@@ -13,6 +13,9 @@ public class SleepTimerReceiver extends BroadcastReceiver {
     public void onReceive(Context context, Intent intent) {
         if(importantElements.mp.isPlaying()) importantElements.mp.stop();
         Log.d("ALARM", "onReceive: alarm");
+        if(importantElements.mp!=null){
+            importantElements.notificationManager.cancelAll();
+        }
         ExitActivity.exitApplication(context);
     }
 }

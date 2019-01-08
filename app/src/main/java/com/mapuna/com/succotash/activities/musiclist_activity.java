@@ -13,9 +13,7 @@ import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.media.MediaMetadataRetriever;
 import android.media.MediaPlayer;
-import android.media.session.MediaSession;
 import android.net.Uri;
-import android.preference.PreferenceManager;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.DialogFragment;
@@ -31,9 +29,6 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.gson.reflect.TypeToken;
 import com.mapuna.com.succotash.MyService;
 import com.mapuna.com.succotash.R;
 import com.mapuna.com.succotash.receiver.SleepTimerReceiver;
@@ -44,12 +39,10 @@ import com.mapuna.com.succotash.fragments.fragmentplaylist;
 import com.mapuna.com.succotash.fragments.fragmentmusiclist;
 import com.mapuna.com.succotash.importantElements;
 
-import java.lang.reflect.Type;
 import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.LinkedHashSet;
-import java.util.List;
 import java.util.Random;
 import java.util.Set;
 
@@ -78,7 +71,12 @@ public class musiclist_activity extends AppCompatActivity implements fragmentmus
         setContentView(R.layout.activity_musiclist_activity);
         mPrefs = getPreferences(MODE_PRIVATE);
 
+        loadDate();
+
         stopService(new Intent(this,MyService.class));
+        if(importantElements.mp!=null){
+            importantElements.notificationManager.cancelAll();
+        }
 
         tabLayout= findViewById(R.id.tablayout_id);
         appBarLayout=findViewById(R.id.appbarid);
@@ -317,11 +315,13 @@ public class musiclist_activity extends AppCompatActivity implements fragmentmus
 
     @Override
     public void scrollup() {
+        if(importantElements.mp!=null)
         music.setVisibility(View.VISIBLE);
     }
 
     @Override
     public void scrolldown() {
+        if(importantElements.mp!=null)
         music.setVisibility(View.INVISIBLE);
 
     }
@@ -330,6 +330,9 @@ public class musiclist_activity extends AppCompatActivity implements fragmentmus
     @Override
     protected void onRestart() {
         super.onRestart();
+        if(importantElements.mp!=null){
+            importantElements.notificationManager.cancelAll();
+        }
         importantElements.recently =removeDuplicates(importantElements.recently);
         fragAlbum.adapter.notifyDataSetChanged();
 
@@ -381,7 +384,17 @@ public class musiclist_activity extends AppCompatActivity implements fragmentmus
     @Override
     public void onBackPressed() {
         super.onBackPressed();
+        //savedata(importantElements.playlist);
+        //saverecent(importantElements.recently);
         startService(new Intent(this,MyService.class));
+    }
+
+    @Override
+    protected void onStop() {
+        savedata(importantElements.playlist);
+        //saverecent(importantElements.recently);
+        startService(new Intent(this,MyService.class));
+        super.onStop();
     }
 
 
@@ -393,6 +406,94 @@ public class musiclist_activity extends AppCompatActivity implements fragmentmus
         c.set(Calendar.SECOND,0);
         startalarm(c);
         setTimer(c);
+    }
+
+
+    public void savedata(ArrayList<ArrayList<Integer>> playlist){
+        String aString;
+        aString = "";
+        int column;
+        int row;
+
+        for (row = 0; row < playlist.size(); row++) {
+            for (column = 0; column < playlist.get(row).size(); column++ ) {
+                if(column==playlist.get(row).size()-1){
+                    aString = aString + playlist.get(row).get(column) ;
+                }
+                else{
+                    aString = aString + playlist.get(row).get(column) + ",";
+                }
+            }
+            if(row==playlist.size()-1){
+                aString = aString + "";
+            }
+            else {
+                aString = aString + ";";
+            }
+        }
+
+        SharedPreferences pref = getApplicationContext().getSharedPreferences("MyPref", 0); // 0 - for private mode
+        SharedPreferences.Editor editor = pref.edit();
+        editor.putString("key_name", aString); // Storing string
+        editor.commit();
+    }
+
+//    public void saverecent(ArrayList<Integer>recent){
+//        String aString="";
+//        int i;
+//        for( i=0;i<recent.size();i++){
+//            if(i==recent.size()-1){
+//                aString = aString + recent.get(i) + "";
+//            }
+//            else{
+//                aString = aString + recent.get(i) + ";";
+//            }
+//        }
+//
+//        SharedPreferences pref = getApplicationContext().getSharedPreferences("recently", 0); // 0 - for private mode
+//        SharedPreferences.Editor editor = pref.edit();
+//        editor.putString("recent", aString); // Storing string
+//        editor.commit();
+//    }
+//
+//    public void loadrecent(){
+//        SharedPreferences pref = getApplicationContext().getSharedPreferences("recently", 0); // 0 - for private mode
+//        String found=pref.getString("recent", null); // getting String
+//
+//        if(found==null || found==""){
+//
+//        }
+//        else{
+//            String spli[]=found.split(";");
+//            int len=spli.length;
+//            for(int i=0;i<len;i++){
+//                int test =Integer.valueOf(spli[i]);
+//                importantElements.recently.add(test);
+//            }
+//        }
+//    }
+
+    public void loadDate(){
+        SharedPreferences pref = getApplicationContext().getSharedPreferences("MyPref", 0); // 0 - for private mode
+        String found=pref.getString("key_name", null); // getting String
+       if(found==null ||found==""){
+
+       }
+       else{
+           String row[]=found.split(";");
+           int width=row.length;
+           for(int i=0;i<width;i++){
+               ArrayList<Integer>oneplay=new ArrayList<>();
+               String cells[]=row[i].split(",");
+               int hieght=cells.length;
+               for(int j=0;j<hieght;j++){
+                   int test =Integer.valueOf(cells[j]);
+                   oneplay.add(test);
+
+               }
+               importantElements.playlist.add(oneplay);
+           }
+       }
     }
 
 
