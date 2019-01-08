@@ -17,14 +17,15 @@ import android.widget.TextView;
 import com.mapuna.com.succotash.R;
 import com.mapuna.com.succotash.importantElements;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class recentrecyclerviewadapter extends RecyclerView.Adapter<recentrecyclerviewadapter.ViewHolder>{
     private Context mctx;
-    private List<Integer>musicfiles;
+    private ArrayList<Integer>musicfiles;
     private onclick listener;
 
-    public recentrecyclerviewadapter(Context mctx,List<Integer> musicfiles , onclick listener) {
+    public recentrecyclerviewadapter(Context mctx,ArrayList<Integer> musicfiles , onclick listener) {
         this.mctx=mctx;
         this.musicfiles=musicfiles;
         this.listener=listener;

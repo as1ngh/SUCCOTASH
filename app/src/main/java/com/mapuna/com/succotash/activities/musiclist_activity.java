@@ -15,6 +15,7 @@ import android.media.MediaMetadataRetriever;
 import android.media.MediaPlayer;
 import android.media.session.MediaSession;
 import android.net.Uri;
+import android.preference.PreferenceManager;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.DialogFragment;
@@ -77,7 +78,6 @@ public class musiclist_activity extends AppCompatActivity implements fragmentmus
         setContentView(R.layout.activity_musiclist_activity);
         mPrefs = getPreferences(MODE_PRIVATE);
 
-        //load();
         stopService(new Intent(this,MyService.class));
 
         tabLayout= findViewById(R.id.tablayout_id);
@@ -105,9 +105,9 @@ public class musiclist_activity extends AppCompatActivity implements fragmentmus
         viewPager.setAdapter(adapter);
         tabLayout.setupWithViewPager(viewPager);
 
-        /* if(ie.mp!=null) {
-            musicName.setText(ie.mysongs.get(ie.currentpos).getName().replace(".mp3", ""));
-            if(ie.mp.isPlaying()) {
+         if(importantElements.mp!=null) {
+            musicName.setText(importantElements.mysongs.get(importantElements.currentpos).getName().replace(".mp3", ""));
+            if(importantElements.mp.isPlaying()) {
                 final Drawable myDrawable;
                 Resources res = getResources();
                 try {
@@ -128,28 +128,14 @@ public class musiclist_activity extends AppCompatActivity implements fragmentmus
                 }
             }
 
-            ie.mp.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+            importantElements.mp.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
                 @Override
                 public void onCompletion(MediaPlayer mp) {
-                    if(ie.currentpos!=ie.mysongs.size()-1){
-                        ie.currentpos=ie.currentpos+1;
-                        ie.mp.stop();
-                        ie.mp.release();
-                        ie.mp=MediaPlayer.create(getApplicationContext(),Uri.parse(ie.mysongs.get(ie.currentpos).getAbsolutePath()));
-                        ie.mp.start();
-                    }
-                    else{
-                        ie.currentpos=0;
-                        ie.mp.stop();
-                        ie.mp.release();
-                        ie.mp=MediaPlayer.create(getApplicationContext(),Uri.parse(ie.mysongs.get(ie.currentpos).getAbsolutePath()));
-                        ie.mp.start();
-                    }
-                    update(ie.currentpos);
+                   getnextsong();
                 }
             });
 
-        } */
+        }
 
         play_pause.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -395,7 +381,6 @@ public class musiclist_activity extends AppCompatActivity implements fragmentmus
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        savedata();
         startService(new Intent(this,MyService.class));
     }
 
@@ -410,32 +395,7 @@ public class musiclist_activity extends AppCompatActivity implements fragmentmus
         setTimer(c);
     }
 
-    private void savedata(){
-        SharedPreferences sharedPreferences=getSharedPreferences("shared preference",MODE_PRIVATE);
-        SharedPreferences.Editor editor=sharedPreferences.edit();
-        Gson gson=new Gson();
-        String json=gson.toJson(importantElements.recently);
-        editor.putString("recent",json);
-        editor.apply();
-        Log.d("SAVEING", "load: SAVE");
 
-    }
-
-    private void load(){
-        SharedPreferences sharedPreferences=getSharedPreferences("shared preference",MODE_PRIVATE);
-        Gson gson=new GsonBuilder().create();
-        String json=sharedPreferences.getString("recent",null);
-        Type type=new TypeToken<ArrayList<Integer>>(){}.getType();
-
-        if(json==null){
-            importantElements.recently=new ArrayList<>();
-        }
-        else {
-            importantElements.recently=gson.fromJson(json,type);
-            Log.d("LOADING", "load: RECENT");
-        }
-
-    }
 
     private void startalarm(Calendar c){
         AlarmManager alarmManager=(AlarmManager)getSystemService(Context.ALARM_SERVICE);

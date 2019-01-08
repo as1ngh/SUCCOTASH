@@ -20,6 +20,8 @@ import android.util.Log;
 import com.mapuna.com.succotash.activities.musiclist_activity;
 import com.mapuna.com.succotash.receiver.NotificationReciever;
 
+import java.util.Random;
+
 
 public class MyService extends Service {
 
@@ -40,48 +42,70 @@ public class MyService extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-
-
-        importantElements.mp.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
-            @Override
-            public void onCompletion(MediaPlayer mp) {
-                if(importantElements.currentpos != importantElements.mysongs.size()-1){
-                    importantElements.currentpos = importantElements.currentpos +1;
-                    importantElements.mp.stop();
-                    importantElements.mp.release();
-                    importantElements.mp =MediaPlayer.create(getApplicationContext(),Uri.parse(importantElements.mysongs.get(importantElements.currentpos).getAbsolutePath()));
-                    importantElements.mp.start();
-                }
-                else{
-                    importantElements.currentpos =0;
-                    importantElements.mp.stop();
-                    importantElements.mp.release();
-                    importantElements.mp =MediaPlayer.create(getApplicationContext(),Uri.parse(importantElements.mysongs.get(importantElements.currentpos).getAbsolutePath()));
-                    importantElements.mp.start();
-                }
-                metadataRetriever =new MediaMetadataRetriever();
-                metadataRetriever.setDataSource(importantElements.mysongs.get(importantElements.currentpos).getAbsolutePath());
-
-                Bitmap artwork = BitmapFactory.decodeResource(getResources(), R.drawable.headphones);
-                if(metadataRetriever.getEmbeddedPicture()!=null){
-                    artwork = BitmapFactory
-                            .decodeByteArray(metadataRetriever.getEmbeddedPicture(), 0, metadataRetriever.getEmbeddedPicture().length);
-
-                }
-                importantElements.notification.setContentTitle(importantElements.mysongs.get(importantElements.currentpos).getName().replace(".mp3",""))
-                        .setLargeIcon(artwork);
-                importantElements.notificationManager.notify(2, importantElements.notification.build());
-            }
-        });
-
-        metadataRetriever =new MediaMetadataRetriever();
-        metadataRetriever.setDataSource(importantElements.mysongs.get(importantElements.currentpos).getAbsolutePath());
-
         if(importantElements.mp !=null)
        {
+           metadataRetriever =new MediaMetadataRetriever();
+           metadataRetriever.setDataSource(importantElements.mysongs.get(importantElements.currentpos).getAbsolutePath());
            MediaSessionCompat mediaSession;
            mediaSession = new MediaSessionCompat(this, "tag");
            importantElements.notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+
+           importantElements.mp.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+               @Override
+               public void onCompletion(MediaPlayer mp) {
+                   if(importantElements.looping ==1){
+                       importantElements.mp.stop();
+                       importantElements.mp.release();
+                       importantElements.mp =null;
+                       importantElements.mp =MediaPlayer.create(getApplicationContext(),Uri.parse(importantElements.mysongs.get(importantElements.currentpos).getAbsolutePath()));
+                       importantElements.mp.start();
+                   }
+                   else if(importantElements.shuffle ==1){
+                       importantElements.currentpos =new Random().nextInt(importantElements.mysongs.size());
+                       importantElements.mp.stop();
+                       importantElements.mp.release();
+                       importantElements.mp =null;
+                       importantElements.mp =MediaPlayer.create(getApplicationContext(),Uri.parse(importantElements.mysongs.get(importantElements.currentpos).getAbsolutePath()));
+                       importantElements.mp.start();
+                   }
+                   else if(importantElements.shuffle==0 && importantElements.looping==0){
+                       if(importantElements.currentpos != importantElements.mysongs.size()-1){
+                           importantElements.currentpos=importantElements.currentpos+1;
+                           importantElements.mp.stop();
+                           importantElements.mp.release();
+                           importantElements.mp =null;
+                           importantElements.mp =MediaPlayer.create(getApplicationContext(),Uri.parse(importantElements.mysongs.get(importantElements.currentpos).getAbsolutePath()));
+                           importantElements.mp.start();
+                       }
+                       else{
+                           importantElements.currentpos =0;
+                           importantElements.mp.stop();
+                           importantElements.mp.release();
+                           importantElements.mp =MediaPlayer.create(getApplicationContext(),Uri.parse(importantElements.mysongs.get(importantElements.currentpos).getAbsolutePath()));
+                           importantElements.mp.start();
+                       }
+                   }
+                   metadataRetriever =new MediaMetadataRetriever();
+                   metadataRetriever.setDataSource(importantElements.mysongs.get(importantElements.currentpos).getAbsolutePath());
+
+                   Bitmap artwork = BitmapFactory.decodeResource(getResources(), R.drawable.headphones);
+                   if(metadataRetriever.getEmbeddedPicture()!=null){
+                       artwork = BitmapFactory
+                               .decodeByteArray(metadataRetriever.getEmbeddedPicture(), 0, metadataRetriever.getEmbeddedPicture().length);
+
+                   }
+                   importantElements.notification.setContentTitle(importantElements.mysongs.get(importantElements.currentpos).getName().replace(".mp3",""))
+                           .setLargeIcon(artwork);
+                   importantElements.notificationManager.notify(2, importantElements.notification.build());
+               }
+           });
+
+
+
+
+
+
+
            builder=new NotificationCompat.Builder(this,CHANNEL_1_ID);
 
            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -135,13 +159,13 @@ public class MyService extends Service {
             importantElements.notification = new NotificationCompat.Builder(this, CHANNEL_1_ID)
                    .setSmallIcon(R.drawable.headphones)
                    .setContentTitle(importantElements.mysongs.get(importantElements.currentpos).getName().replace(".mp3",""))
-                   .setContentText("MESSAGE")
+                   .setContentText(metadataRetriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_ARTIST))
                    .setLargeIcon(artwork)
                     .setAutoCancel(true)
                    .setContentIntent(contentIntent)
                    .addAction(R.drawable.previous, "Previous", previous)
                    .addAction(R.drawable.rewind, "rewind", rewind)
-                   .addAction(importantElements.mp.isPlaying()?R.drawable.pause:R.drawable.play, "Pause", playpause)
+                   .addAction(R.drawable.power, "Pause", playpause)
                    .addAction(R.drawable.forward, "forward", forward)
                    .addAction(R.drawable.next, "Next", next)
                    .setStyle(new android.support.v4.media.app.NotificationCompat.MediaStyle()
@@ -161,6 +185,9 @@ public class MyService extends Service {
     public void onDestroy() {
         super.onDestroy();
         //notificationManager.cancel(2);
+        if(importantElements.mp!=null){
+            importantElements.notificationManager.cancelAll();
+        }
         Log.d("DESTROY", "onDestroy:APPDES ");
     }
 
@@ -168,6 +195,8 @@ public class MyService extends Service {
     public void onTaskRemoved(Intent rootIntent) {
 //Toast.makeText(this, “service called: “, Toast.LENGTH_LONG).show();
         super.onTaskRemoved(rootIntent);
-        importantElements.notificationManager.cancelAll();
+        if(importantElements.mp!=null){
+            importantElements.notificationManager.cancelAll();
+        }
     }
 }
