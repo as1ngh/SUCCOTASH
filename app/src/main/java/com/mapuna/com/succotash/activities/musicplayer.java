@@ -356,7 +356,7 @@ public class musicplayer extends AppCompatActivity implements musicController.Me
     protected void onStop() {
         savedata(importantElements.playlist);
         //saverecent(importantElements.recently);
-        startService(new Intent(this,MyService.class));
+        //startService(new Intent(this,MyService.class));
         super.onStop();
     }
 

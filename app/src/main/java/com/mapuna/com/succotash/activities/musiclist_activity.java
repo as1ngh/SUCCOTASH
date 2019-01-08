@@ -384,7 +384,7 @@ public class musiclist_activity extends AppCompatActivity implements fragmentmus
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        //savedata(importantElements.playlist);
+        savedata(importantElements.playlist);
         //saverecent(importantElements.recently);
         startService(new Intent(this,MyService.class));
     }
@@ -480,6 +480,7 @@ public class musiclist_activity extends AppCompatActivity implements fragmentmus
 
        }
        else{
+           importantElements.playlist=new ArrayList<>();
            String row[]=found.split(";");
            int width=row.length;
            for(int i=0;i<width;i++){
