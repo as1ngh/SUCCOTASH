@@ -38,6 +38,7 @@ public class recentrecyclerviewadapter extends RecyclerView.Adapter<recentrecycl
         return new ViewHolder(view);
     }
 
+    //GETS INFO ABOUT VARIOUS SONG AND PUTS IN RECYCLER VIEW
     @Override
     public void onBindViewHolder(@NonNull final ViewHolder viewHolder, final int i) {
         MediaMetadataRetriever metadataRetriever;
@@ -98,6 +99,7 @@ public class recentrecyclerviewadapter extends RecyclerView.Adapter<recentrecycl
     }
 
 
+    //ACTIVATES WHEN A RECENT SONG IS SELECTED
     public interface onclick{
         void onClick(int pos);
     }

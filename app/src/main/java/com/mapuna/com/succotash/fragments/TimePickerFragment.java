@@ -10,6 +10,7 @@ import android.support.v4.app.DialogFragment;
 import java.text.DateFormat;
 import java.util.Calendar;
 
+//FRAGMENT FOR TIMER DIALOG
 public class TimePickerFragment extends DialogFragment {
     @NonNull
     @Override

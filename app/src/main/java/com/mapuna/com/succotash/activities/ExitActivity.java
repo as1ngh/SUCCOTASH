@@ -4,7 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-
+//A class to close app and remove it from recent task
 public class ExitActivity extends Activity
 {
     @Override protected void onCreate(Bundle savedInstanceState)

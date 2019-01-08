@@ -32,6 +32,9 @@ public class fragmentplaylist extends Fragment {
     public fragmentplaylist() {
     }
 
+
+
+    //GET PLAYLIST AND SAVES IN importantElements.playlist
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {

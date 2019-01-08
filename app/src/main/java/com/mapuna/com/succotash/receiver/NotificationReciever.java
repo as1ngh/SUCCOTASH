@@ -12,6 +12,8 @@ import android.net.Uri;
 import com.mapuna.com.succotash.R;
 import com.mapuna.com.succotash.importantElements;
 
+//RECEIVER FOR ACTIONS ON NOTIFICATION
+
 public class NotificationReciever extends BroadcastReceiver {
     MediaMetadataRetriever metadataRetriever;
 

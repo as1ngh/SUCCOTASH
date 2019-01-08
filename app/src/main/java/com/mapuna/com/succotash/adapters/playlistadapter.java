@@ -60,6 +60,7 @@ public class playlistadapter  extends RecyclerView.Adapter<playlistadapter.ViewH
         }
     }
 
+    //ACTIVATES WHEN A PLAYLIST IS OPENED
     public interface CustomItemClickListener {
         void onItemClick(int position);
     }

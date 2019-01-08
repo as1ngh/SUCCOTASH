@@ -65,6 +65,7 @@ public class fragmentmusiclist extends Fragment  {
 
 
 
+    //TO FIND ALL SONG FILES
     public ArrayList<File>findsong(File file){
         ArrayList<File> arrayList=new ArrayList<>();
 
@@ -98,12 +99,14 @@ public class fragmentmusiclist extends Fragment  {
         got = null;
     }
 
+    //INTERFACE TO DETECT INPUT FROM RECYCLERVIEW
     public interface gotinput{
         void getupdate(int i);
         void scrollup();
         void scrolldown();
     }
 
+    //ASYNCTASK TO PERFORM SEARCHING IN DIFFERENT THREAD
     public class Asynctask extends AsyncTask<Void,Void,Void>{
 
         @Override
@@ -127,6 +130,7 @@ public class fragmentmusiclist extends Fragment  {
         }
     }
 
+    //TO GET INFO ABOUT SCROLLING OF RECYCLER VIEW
     public class CustomScrollListener extends RecyclerView.OnScrollListener {
         public CustomScrollListener() {
         }

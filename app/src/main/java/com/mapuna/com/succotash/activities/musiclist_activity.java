@@ -62,14 +62,12 @@ public class musiclist_activity extends AppCompatActivity implements fragmentmus
     RelativeLayout music;
     MediaMetadataRetriever metadataRetriever;
     TextView time;
-    SharedPreferences  mPrefs;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_musiclist_activity);
-        mPrefs = getPreferences(MODE_PRIVATE);
 
         loadDate();
 
@@ -92,6 +90,7 @@ public class musiclist_activity extends AppCompatActivity implements fragmentmus
         Typeface musicfont=Typeface.createFromAsset(getAssets(),"fonts/Raleway-Light.ttf");
         musicName.setTypeface(musicfont);
 
+        //Set viewPager adapter with fragments
         fragMusicList =new fragmentmusiclist();
         fragAlbum =new fragmentrecent();
         fragPlaylist=new fragmentplaylist();
@@ -103,6 +102,7 @@ public class musiclist_activity extends AppCompatActivity implements fragmentmus
         viewPager.setAdapter(adapter);
         tabLayout.setupWithViewPager(viewPager);
 
+        //To place music data on activity on first run if mediaplayer is not null
          if(importantElements.mp!=null) {
             musicName.setText(importantElements.mysongs.get(importantElements.currentpos).getName().replace(".mp3", ""));
             if(importantElements.mp.isPlaying()) {
@@ -135,6 +135,7 @@ public class musiclist_activity extends AppCompatActivity implements fragmentmus
 
         }
 
+        //PLAY/PAUSE BUTTON
         play_pause.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -170,6 +171,7 @@ public class musiclist_activity extends AppCompatActivity implements fragmentmus
         });
 
 
+         //CLICK TO START MUSIC PLAYER ACTIVITY
         music.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -190,6 +192,8 @@ public class musiclist_activity extends AppCompatActivity implements fragmentmus
 
     }
 
+
+    //Function for getting next song with some conditions like shuffle and looping
     public void getnextsong(){
         if(importantElements.looping ==1){
             importantElements.mp.stop();
@@ -231,6 +235,7 @@ public class musiclist_activity extends AppCompatActivity implements fragmentmus
     }
 
 
+    //To update the activity according to current music playing
     void update(int i){
         metadataRetriever =new MediaMetadataRetriever();
         metadataRetriever.setDataSource(importantElements.mysongs.get(i).getAbsolutePath());
@@ -282,6 +287,7 @@ public class musiclist_activity extends AppCompatActivity implements fragmentmus
         });
     }
 
+    //To update Recently listened list of song so that no one is repeated
     public static <T> ArrayList<T> removeDuplicates(ArrayList<T> list)
     {
         // Create a new LinkedHashSet
@@ -303,6 +309,7 @@ public class musiclist_activity extends AppCompatActivity implements fragmentmus
 
 
 
+    //To get update from various fragments
     @Override
     public void getupdate(int i) {
         music.setVisibility(View.VISIBLE);
@@ -313,12 +320,14 @@ public class musiclist_activity extends AppCompatActivity implements fragmentmus
         //Toast.makeText(getApplicationContext(), "No Music Selected"+i, Toast.LENGTH_LONG).show();
     }
 
+    //To set action when recyclerView scrolled up
     @Override
     public void scrollup() {
         if(importantElements.mp!=null)
         music.setVisibility(View.VISIBLE);
     }
 
+    //To set action when recyclerView scrolled down
     @Override
     public void scrolldown() {
         if(importantElements.mp!=null)
@@ -398,6 +407,7 @@ public class musiclist_activity extends AppCompatActivity implements fragmentmus
     }
 
 
+    //called when time is set
     @Override
     public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
         Calendar c=Calendar.getInstance();
@@ -409,6 +419,7 @@ public class musiclist_activity extends AppCompatActivity implements fragmentmus
     }
 
 
+    //To save the updated playlist from this activity
     public void savedata(ArrayList<ArrayList<Integer>> playlist){
         String aString;
         aString = "";
@@ -438,41 +449,7 @@ public class musiclist_activity extends AppCompatActivity implements fragmentmus
         editor.commit();
     }
 
-//    public void saverecent(ArrayList<Integer>recent){
-//        String aString="";
-//        int i;
-//        for( i=0;i<recent.size();i++){
-//            if(i==recent.size()-1){
-//                aString = aString + recent.get(i) + "";
-//            }
-//            else{
-//                aString = aString + recent.get(i) + ";";
-//            }
-//        }
-//
-//        SharedPreferences pref = getApplicationContext().getSharedPreferences("recently", 0); // 0 - for private mode
-//        SharedPreferences.Editor editor = pref.edit();
-//        editor.putString("recent", aString); // Storing string
-//        editor.commit();
-//    }
-//
-//    public void loadrecent(){
-//        SharedPreferences pref = getApplicationContext().getSharedPreferences("recently", 0); // 0 - for private mode
-//        String found=pref.getString("recent", null); // getting String
-//
-//        if(found==null || found==""){
-//
-//        }
-//        else{
-//            String spli[]=found.split(";");
-//            int len=spli.length;
-//            for(int i=0;i<len;i++){
-//                int test =Integer.valueOf(spli[i]);
-//                importantElements.recently.add(test);
-//            }
-//        }
-//    }
-
+    //To load playlist from shared preference
     public void loadDate(){
         SharedPreferences pref = getApplicationContext().getSharedPreferences("MyPref", 0); // 0 - for private mode
         String found=pref.getString("key_name", null); // getting String
@@ -499,6 +476,7 @@ public class musiclist_activity extends AppCompatActivity implements fragmentmus
 
 
 
+    //To set time to close the app after few interval
     private void startalarm(Calendar c){
         AlarmManager alarmManager=(AlarmManager)getSystemService(Context.ALARM_SERVICE);
         Intent intent=new Intent(this,SleepTimerReceiver.class);

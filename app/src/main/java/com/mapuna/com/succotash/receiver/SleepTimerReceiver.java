@@ -7,7 +7,7 @@ import android.util.Log;
 
 import com.mapuna.com.succotash.activities.ExitActivity;
 import com.mapuna.com.succotash.importantElements;
-
+//RECEIVER FOR TIMER
 public class SleepTimerReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {

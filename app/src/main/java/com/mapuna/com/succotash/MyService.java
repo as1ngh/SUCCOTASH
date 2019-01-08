@@ -44,6 +44,7 @@ public class MyService extends Service {
     public int onStartCommand(Intent intent, int flags, int startId) {
         if(importantElements.mp !=null)
        {
+           //SET PROPERTIES OF NEXT SONG ON SERVICE CLASS
            metadataRetriever =new MediaMetadataRetriever();
            metadataRetriever.setDataSource(importantElements.mysongs.get(importantElements.currentpos).getAbsolutePath());
            MediaSessionCompat mediaSession;
@@ -105,7 +106,7 @@ public class MyService extends Service {
 
 
 
-
+          //BUILDING NOTIFICATION CHANNEL AND NOTIFICATION
            builder=new NotificationCompat.Builder(this,CHANNEL_1_ID);
 
            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {

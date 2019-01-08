@@ -1,7 +1,6 @@
 package com.mapuna.com.succotash.activities;
 
 
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -19,7 +18,6 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.mapuna.com.succotash.MyService;
 import com.mapuna.com.succotash.R;
 import com.mapuna.com.succotash.importantElements;
 import com.mapuna.com.succotash.musicController;
@@ -160,6 +158,7 @@ public class musicplayer extends AppCompatActivity implements musicController.Me
     }
 
 
+    //TO GET NEXT SONG ACCORDING TO SOME PARAMETERS
     public void getnextsong(){
         if(importantElements.looping ==1){
             importantElements.mp.stop();
@@ -200,6 +199,7 @@ public class musicplayer extends AppCompatActivity implements musicController.Me
         update();
     }
 
+    //UPDATE SHUFFLE AND LOOPING BUTTONS
     public void setsmallicon(){
         if(importantElements.shuffle ==1 && importantElements.looping ==0){
             shuffle.setBackground(getResources().getDrawable(R.drawable.ic_shuffle_black_24dp));
@@ -218,6 +218,7 @@ public class musicplayer extends AppCompatActivity implements musicController.Me
     }
 
 
+    //UPDATE THE WHOLE ACTIVITY
     public void update(){
         metadataRetriever.setDataSource(importantElements.mysongs.get(importantElements.currentpos).getAbsolutePath());
         if(metadataRetriever.getEmbeddedPicture()!=null){
@@ -323,6 +324,7 @@ public class musicplayer extends AppCompatActivity implements musicController.Me
         return false;
     }
 
+    //SAVES PLAYLIST IF APP CLOSED FROM HERE
     public void savedata(ArrayList<ArrayList<Integer>> playlist){
         String aString;
         aString = "";

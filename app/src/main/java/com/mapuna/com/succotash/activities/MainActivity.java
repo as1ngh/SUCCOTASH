@@ -33,7 +33,7 @@ public class MainActivity extends AppCompatActivity {
 
         stopService(new Intent(this,MyService.class));
     }
-
+     //Dexter Library for getting permission
     public void permission () {
         Dexter.withActivity(this).withPermission(Manifest.permission.READ_EXTERNAL_STORAGE).withListener(new PermissionListener() {
             @Override
