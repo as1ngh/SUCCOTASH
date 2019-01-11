@@ -1,5 +1,6 @@
 package com.mapuna.com.succotash.fragments;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -26,6 +27,7 @@ public class fragmentmusiclist extends Fragment  {
     RecyclerView musicnames;
     gotinput got;
     public RecyclerViewAdapter adapter;
+    ProgressDialog dialog;
 
     public fragmentmusiclist() {
 
@@ -40,6 +42,11 @@ public class fragmentmusiclist extends Fragment  {
         musicnames= view.findViewById(R.id.musicl);
         musicnames.addOnScrollListener(new CustomScrollListener());
         Asynctask task =new Asynctask();
+        dialog=new ProgressDialog(getActivity());
+        dialog.setMessage("Loading");
+        dialog.setCancelable(false);
+        dialog.setInverseBackgroundForced(false);
+        dialog.show();
         task.execute();
 
        /* musicnames.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -119,6 +126,7 @@ public class fragmentmusiclist extends Fragment  {
         @Override
         protected void onProgressUpdate(Void... values) {
             super.onProgressUpdate(values);
+
             adapter=new RecyclerViewAdapter(getActivity(), importantElements.mysongs, new RecyclerViewAdapter.CustomItemClickListener() {
                 @Override
                 public void onItemClick(int position) {
@@ -127,6 +135,7 @@ public class fragmentmusiclist extends Fragment  {
             });
             musicnames.setAdapter(adapter);
             musicnames.setLayoutManager(new LinearLayoutManager(getActivity()));
+            dialog.hide();
         }
     }
 

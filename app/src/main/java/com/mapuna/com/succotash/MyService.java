@@ -160,7 +160,7 @@ public class MyService extends Service {
             importantElements.notification = new NotificationCompat.Builder(this, CHANNEL_1_ID)
                    .setSmallIcon(R.drawable.headphones)
                    .setContentTitle(importantElements.mysongs.get(importantElements.currentpos).getName().replace(".mp3",""))
-                   .setContentText(metadataRetriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_ARTIST))
+                   .setContentText(metadataRetriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_ARTIST)==null?"<unknown>":metadataRetriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_ARTIST))
                    .setLargeIcon(artwork)
                     .setAutoCancel(true)
                    .setContentIntent(contentIntent)

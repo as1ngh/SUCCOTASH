@@ -47,7 +47,9 @@ public class NotificationReciever extends BroadcastReceiver {
 
              }
              importantElements.notification.setContentTitle(importantElements.mysongs.get(importantElements.currentpos).getName().replace(".mp3",""))
-                     .setLargeIcon(artwork);
+                     .setLargeIcon(artwork)
+                     .setContentText(metadataRetriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_ARTIST)==null?"<unknown>":metadataRetriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_ARTIST))
+         ;
              importantElements.notificationManager.notify(2, importantElements.notification.build());
          }
          else if(i==2)
@@ -90,7 +92,8 @@ public class NotificationReciever extends BroadcastReceiver {
 
              }
              importantElements.notification.setContentTitle(importantElements.mysongs.get(importantElements.currentpos).getName().replace(".mp3",""))
-                             .setLargeIcon(artwork);
+                             .setLargeIcon(artwork)
+                             .setContentText(metadataRetriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_ARTIST)==null?"<unknown>":metadataRetriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_ARTIST));
              importantElements.notificationManager.notify(2, importantElements.notification.build());
          }
          else if (i==4){

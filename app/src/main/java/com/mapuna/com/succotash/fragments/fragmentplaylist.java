@@ -42,6 +42,8 @@ public class fragmentplaylist extends Fragment {
         addplay=view.findViewById(R.id.addplaylist);
         playls=view.findViewById(R.id.playlist_id);
         playls.addOnScrollListener(new CustomScrollListener());
+        got.scrolldown();
+
 
         ArrayList<String>getsongs=new ArrayList<>();
         for(int i=0;i<importantElements.mysongs.size();i++){
@@ -137,6 +139,7 @@ public class fragmentplaylist extends Fragment {
                         importantElements.mp =MediaPlayer.create(getContext(),Uri.parse(importantElements.mysongs.get(importantElements.currentpos).getAbsolutePath()));
                         importantElements.mp.start();
                         got.getupdate(importantElements.currentpos);
+                        got.scrolldown();
                     }
                 });
                 AlertDialog dialog = builder.create();
